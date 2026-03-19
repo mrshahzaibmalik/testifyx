@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TestifyX</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07091a;
+  --bg2:#0d1130;
+  --p1:#6c63ff;
+  --p2:#a855f7;
+  --c3:#3b82f6;
+  --cyan:#06b6d4;
+  --green:#10b981;
+  --red:#f43f5e;
+  --gold:#f59e0b;
+  --txt:#eef0ff;
+  --txt2:#8892b0;
+  --muted:#4a5580;
+  --glass:rgba(255,255,255,0.06);
+  --gb:rgba(255,255,255,0.10);
+  --font:'Poppins',sans-serif;
+  --r:16px;
+  --r2:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:var(--font);background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
+
+/* ── PAGES ─────────────────────── */
+.pg{display:none;min-height:100vh;flex-direction:column;position:relative;z-index:2}
+.pg.on{display:flex}
+
+/* ── ANIMATED BG ───────────────── */
+#cvs{position:fixed;inset:0;z-index:0;pointer-events:none}
+.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;animation:orbFloat ease-in-out infinite alternate}
+.o1{width:500px;height:500px;top:-10%;left:-10%;background:radial-gradient(circle,rgba(108,99,255,.25),transparent 70%);animation-duration:12s}
+.o2{width:400px;height:400px;bottom:-5%;right:-5%;background:radial-gradient(circle,rgba(168,85,247,.2),transparent 70%);animation-duration:9s;animation-delay:-4s}
+.o3{width:300px;height:300px;top:40%;right:5%;background:radial-gradient(circle,rgba(59,130,246,.15),transparent 70%);animation-duration:14s;animation-delay:-7s}
+@keyframes orbFloat{from{transform:translate(0,0) scale(1)}to{transform:translate(30px,20px) scale(1.1)}}
+
+/* ── GLASS CARD ────────────────── */
+.glass{
+  background:var(--glass);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--gb);
+  border-radius:var(--r);
+  box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* ── GRADIENT TEXT ─────────────── */
+.gt{background:linear-gradient(135deg,var(--p1),var(--p2),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* ── BUTTONS ───────────────────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  padding:12px 26px;border-radius:50px;border:none;cursor:pointer;
+  font-family:var(--font);font-size:14px;font-weight:600;
+  transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+  position:relative;overflow:hidden;white-space:nowrap;
+  -webkit-tap-highlight-color:transparent;
+  text-decoration:none;
+}
+.btn:active{transform:scale(.96)!important}
+.btn-p{background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;box-shadow:0 4px 20px rgba(108,99,255,.4)}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(108,99,255,.6)}
+.btn-o{background:transparent;color:var(--txt2);border:1px solid var(--gb)}
+.btn-o:hover{border-color:var(--p1);color:var(--p1);background:rgba(108,99,255,.08)}
+.btn-danger{background:rgba(244,63,94,.15);color:var(--red);border:1px solid rgba(244,63,94,.3)}
+.btn-danger:hover{background:rgba(244,63,94,.25)}
+.btn-sm{padding:8px 18px;font-size:13px}
+.btn-xs{padding:6px 14px;font-size:12px;border-radius:10px}
+.btn-full{width:100%}
+.btn-icon{padding:9px;border-radius:10px;font-size:16px;aspect-ratio:1;line-height:1}
+
+/* Ripple */
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.25);transform:scale(0);animation:rpl .55s linear;pointer-events:none}
+@keyframes rpl{to{transform:scale(4);opacity:0}}
+
+/* ── TOPNAV ────────────────────── */
+.nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 28px;position:sticky;top:0;z-index:100;
+  background:rgba(7,9,26,.88);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--gb);
+  flex-wrap:wrap;gap:8px;
+}
+.brand{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800;letter-spacing:-.5px}
+.brand-ico{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--p1),var(--p2));
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+  box-shadow:0 0 18px rgba(108,99,255,.5);
+}
+.nav-r{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.u-chip{
+  display:flex;align-items:center;gap:7px;
+  padding:5px 12px 5px 5px;border-radius:40px;
+  background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);
+}
+.u-ava{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--p1),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0}
+.u-name{font-size:12px;font-weight:700;color:var(--p1)}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.chip-g{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+.chip-r{background:rgba(244,63,94,.15);color:var(--red);border:1px solid rgba(244,63,94,.3)}
+.chip-p{background:rgba(108,99,255,.15);color:var(--p1);border:1px solid rgba(108,99,255,.3)}
+.chip-gold{background:rgba(245,158,11,.15);color:var(--gold);border:1px solid rgba(245,158,11,.3)}
+
+/* ── FORMS ─────────────────────── */
+.flabel{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--txt2);margin-bottom:7px}
+.finput{
+  width:100%;padding:13px 16px;
+  background:rgba(255,255,255,.05);border:1px solid var(--gb);
+  border-radius:var(--r2);color:var(--txt);font-size:14px;font-family:var(--font);
+  outline:none;transition:border-color .2s,box-shadow .2s,background .2s;
+}
+.finput:focus{border-color:var(--p1);background:rgba(108,99,255,.08);box-shadow:0 0 0 3px rgba(108,99,255,.18)}
+.finput::placeholder{color:var(--muted)}
+.fselect{
+  width:100%;padding:12px 36px 12px 14px;
+  background:rgba(255,255,255,.05);border:1px solid var(--gb);
+  border-radius:var(--r2);color:var(--txt);font-size:14px;font-family:var(--font);
+  outline:none;cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238892b0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 13px center;
+  transition:border-color .2s;
+}
+.fselect:focus{border-color:var(--p1);outline:none}
+.fselect option{background:#0d1130;color:var(--txt)}
+.ftxt{
+  width:100%;padding:13px 16px;min-height:85px;resize:vertical;
+  background:rgba(255,255,255,.05);border:1px solid var(--gb);
+  border-radius:var(--r2);color:var(--txt);font-size:14px;font-family:var(--font);
+  outline:none;transition:border-color .2s;
+}
+.ftxt:focus{border-color:var(--p1);outline:none}
+.fg{margin-bottom:16px}
+.err{padding:10px 14px;border-radius:10px;background:rgba(244,63,94,.12);border:1px solid rgba(244,63,94,.35);color:#fca5a5;font-size:13px;display:none;margin-top:8px}
+.divhr{height:1px;background:var(--gb);margin:18px 0}
+
+/* ── LOADING ───────────────────── */
+#loader{
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:rgba(7,9,26,.95);
+  align-items:center;justify-content:center;flex-direction:column;gap:20px;
+}
+#loader.on{display:flex}
+.spin-ring{
+  width:56px;height:56px;border-radius:50%;
+  border:3px solid rgba(255,255,255,.08);
+  border-top-color:var(--p1);border-right-color:var(--p2);
+  animation:spin .9s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ld-txt{font-size:13px;font-weight:600;color:var(--txt2);letter-spacing:.08em;animation:blink 1.2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:.5}50%{opacity:1}}
+
+/* ── TOAST ─────────────────────── */
+#toast{
+  position:fixed;bottom:24px;right:24px;z-index:9000;
+  padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;
+  backdrop-filter:blur(16px);display:flex;align-items:center;gap:8px;
+  transform:translateY(70px);opacity:0;transition:all .35s cubic-bezier(.22,1,.36,1);
+  max-width:300px;pointer-events:none;
+}
+#toast.on{transform:translateY(0);opacity:1}
+.t-ok{background:rgba(16,185,129,.2);border:1px solid rgba(16,185,129,.4);color:#6ee7b7}
+.t-err{background:rgba(244,63,94,.2);border:1px solid rgba(244,63,94,.4);color:#fca5a5}
+
+/* ── MODAL ─────────────────────── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:500;align-items:center;justify-content:center;padding:20px}
+.modal-bg.on{display:flex}
+.modal-box{padding:28px;width:100%;max-width:420px}
+.modal-box h3{font-size:17px;font-weight:800;margin-bottom:8px}
+.modal-acts{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+
+/* ═══════════════════════════════════
+   LOGIN PAGE
+═══════════════════════════════════ */
+#pg-login{align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.login-wrap{width:100%;max-width:420px;animation:fadeUp .6s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.login-hero{text-align:center;margin-bottom:28px}
+.login-orb{
+  width:80px;height:80px;border-radius:24px;margin:0 auto 16px;
+  background:linear-gradient(135deg,var(--p1),var(--p2));
+  display:flex;align-items:center;justify-content:center;font-size:36px;
+  box-shadow:0 0 40px rgba(108,99,255,.55),0 0 80px rgba(108,99,255,.25);
+  animation:pulse 3s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 40px rgba(108,99,255,.55),0 0 80px rgba(108,99,255,.25)}50%{box-shadow:0 0 60px rgba(168,85,247,.8),0 0 100px rgba(108,99,255,.35)}}
+.login-title{font-size:34px;font-weight:900;letter-spacing:-1px}
+.login-sub{font-size:13px;color:var(--txt2);margin-top:5px}
+.login-card{padding:32px}
+.login-credit{text-align:center;margin-top:16px;font-size:12px;color:var(--muted)}
+.login-credit b{color:var(--p1)}
+
+/* ═══════════════════════════════════
+   STUDENT NAME PAGE
+═══════════════════════════════════ */
+#pg-name{align-items:center;justify-content:center;padding:40px 20px}
+.center-card{width:100%;max-width:450px;padding:36px;animation:fadeUp .5s ease both}
+.pg-title{font-size:24px;font-weight:800;margin-bottom:6px}
+.pg-sub{font-size:14px;color:var(--txt2);margin-bottom:24px}
+
+/* ═══════════════════════════════════
+   CHAPTER SELECT PAGE
+═══════════════════════════════════ */
+#pg-chapter{align-items:center;justify-content:center;padding:32px 20px}
+.ch-wrap{width:100%;max-width:600px;padding:36px;animation:fadeUp .5s ease both}
+.ch-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:20px 0}
+.ch-card{
+  padding:22px 16px;border-radius:var(--r);text-align:center;
+  background:rgba(255,255,255,.04);border:1px solid var(--gb);
+  cursor:pointer;transition:transform .25s ease,border-color .25s ease,background .25s ease,box-shadow .25s ease;
+  position:relative;overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+.ch-card:hover{transform:translateY(-5px);border-color:rgba(108,99,255,.5);background:rgba(108,99,255,.1);box-shadow:0 8px 24px rgba(108,99,255,.2)}
+.ch-card:active{transform:translateY(-2px) scale(.98)}
+.ch-icon{font-size:28px;margin-bottom:8px}
+.ch-num{font-size:20px;font-weight:800;background:linear-gradient(135deg,var(--p1),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ch-name{font-size:11px;color:var(--txt2);margin-top:4px;line-height:1.4;font-weight:500}
+.ch-full{
+  grid-column:span 2;
+  background:linear-gradient(135deg,rgba(108,99,255,.12),rgba(168,85,247,.08),rgba(6,182,212,.06));
+  border-color:rgba(108,99,255,.3);
+}
+.ch-full .ch-num{font-size:15px}
+
+/* ═══════════════════════════════════
+   QUIZ PAGE
+═══════════════════════════════════ */
+#pg-quiz{background:var(--bg)}
+.quiz-nav{
+  padding:12px 20px;position:sticky;top:0;z-index:50;
+  background:rgba(7,9,26,.92);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--gb);
+  display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;gap:12px;
+}
+.qnav-l{display:flex;flex-direction:column;gap:2px}
+.qnav-student{font-size:13px;font-weight:700;color:var(--p1);display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qnav-ch{font-size:11px;color:var(--muted);font-weight:500}
+.qnav-c{display:flex;flex-direction:column;align-items:center;gap:5px}
+.qnav-counter{font-size:14px;font-weight:800;white-space:nowrap}
+.qnav-counter span{color:var(--muted);font-weight:400}
+.progress-wrap{width:160px;height:7px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
+.progress-bar{
+  height:100%;border-radius:4px;
+  background:linear-gradient(90deg,var(--p1),var(--p2));
+  transition:width .5s cubic-bezier(.22,1,.36,1);
+  position:relative;overflow:hidden;
+}
+.progress-bar::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
+  animation:shine 1.8s ease-in-out infinite;
+}
+@keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}
+.qnav-r{display:flex;align-items:center;justify-content:flex-end;gap:12px}
+.qstat{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:700}
+.qs-ok{color:var(--green)}.qs-no{color:var(--red)}
+
+/* Timer */
+.timer-wrap{position:relative;width:46px;height:46px;flex-shrink:0}
+.timer-wrap svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.t-bg{stroke:rgba(255,255,255,.08);fill:none;stroke-width:4}
+.t-arc{fill:none;stroke-width:4;stroke-linecap:round;stroke-dasharray:125.7;stroke-dashoffset:0;stroke:var(--p1);transition:stroke-dashoffset 1s linear,stroke .4s ease}
+.t-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+
+/* Quiz body */
+.quiz-body{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px}
+.q-card{width:100%;max-width:760px;padding:36px;animation:fadeUp .35s ease both}
+.q-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 14px;border-radius:30px;margin-bottom:16px;
+  background:rgba(108,99,255,.12);border:1px solid rgba(108,99,255,.28);
+  font-size:12px;font-weight:600;color:var(--p1);
+}
+.q-text{font-size:18px;font-weight:600;line-height:1.7;color:var(--txt);margin-bottom:26px}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{
+  display:flex;align-items:center;gap:14px;
+  padding:15px 18px;border-radius:14px;
+  background:rgba(255,255,255,.04);border:1.5px solid var(--gb);
+  cursor:pointer;text-align:left;color:var(--txt);
+  font-size:14px;font-weight:500;font-family:var(--font);width:100%;
+  transition:transform .2s ease,border-color .2s ease,background .2s ease,box-shadow .2s ease;
+  position:relative;overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+.opt:hover:not(:disabled){
+  border-color:rgba(108,99,255,.5);background:rgba(108,99,255,.1);
+  transform:translateX(5px);box-shadow:-4px 0 0 var(--p1);
+}
+.opt:disabled{cursor:default}
+.opt-l{
+  width:34px;height:34px;border-radius:9px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.07);font-weight:800;font-size:13px;color:var(--txt2);
+  transition:background .2s,color .2s;
+}
+/* Correct */
+.opt.correct{border-color:var(--green);background:rgba(16,185,129,.12);box-shadow:0 0 18px rgba(16,185,129,.25)}
+.opt.correct .opt-l{background:var(--green);color:#fff;animation:flipL .45s ease}
+@keyframes flipL{0%{transform:rotateY(0)}50%{transform:rotateY(90deg) scale(.8)}100%{transform:rotateY(0)}}
+/* Wrong */
+.opt.wrong{border-color:var(--red);background:rgba(244,63,94,.1);animation:shake .45s ease}
+.opt.wrong .opt-l{background:var(--red);color:#fff}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+
+/* Answer feedback */
+.ans-fb{
+  display:none;align-items:center;gap:12px;
+  margin-top:18px;padding:14px 18px;border-radius:14px;
+  font-size:14px;font-weight:600;animation:fadeUp .3s ease;
+}
+.ans-fb.on{display:flex}
+.ans-fb.fb-ok{background:rgba(16,185,129,.14);border:1px solid rgba(16,185,129,.35);color:#6ee7b7}
+.ans-fb.fb-err{background:rgba(244,63,94,.14);border:1px solid rgba(244,63,94,.35);color:#fca5a5}
+.ans-emoji{font-size:28px;animation:emojiPop .45s cubic-bezier(.22,1,.36,1)}
+@keyframes emojiPop{0%{transform:scale(0) rotate(-15deg)}70%{transform:scale(1.2) rotate(5deg)}100%{transform:scale(1) rotate(0)}}
+
+/* ═══════════════════════════════════
+   RESULT PAGE
+═══════════════════════════════════ */
+#pg-result{padding-bottom:40px}
+.result-body{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:28px 16px}
+.result-card{width:100%;max-width:720px;padding:40px;animation:fadeUp .5s ease both}
+.r-top{text-align:center;margin-bottom:30px}
+.r-emoji{font-size:72px;display:block;margin-bottom:10px;animation:emojiPop .6s .2s both}
+/* Score ring */
+.ring-wrap{width:130px;height:130px;margin:0 auto 18px;position:relative}
+.ring-svg{transform:rotate(-90deg)}
+.ring-bg{stroke:rgba(255,255,255,.07);fill:none;stroke-width:9}
+.ring-arc{fill:none;stroke-width:9;stroke-linecap:round;stroke-dasharray:376;stroke-dashoffset:376;transition:stroke-dashoffset 1.4s cubic-bezier(.22,1,.36,1);stroke:url(#rg)}
+.ring-mid{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.ring-pct{font-size:26px;font-weight:900;background:linear-gradient(135deg,var(--p1),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ring-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:700}
+.r-title{font-size:26px;font-weight:800;margin-bottom:6px}
+.r-info{font-size:13px;color:var(--txt2);margin-bottom:12px}
+.r-info b{color:var(--p1)}
+.pass-pill{display:inline-block;padding:6px 20px;border-radius:30px;font-weight:800;font-size:13px}
+.pill-pass{background:rgba(16,185,129,.18);color:var(--green);border:1px solid rgba(16,185,129,.4)}
+.pill-fail{background:rgba(244,63,94,.18);color:var(--red);border:1px solid rgba(244,63,94,.4)}
+/* Stats */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
+.sbox{padding:18px 12px;border-radius:14px;text-align:center;background:rgba(255,255,255,.04);border:1px solid var(--gb)}
+.sbox-n{font-size:30px;font-weight:900;line-height:1}
+.sbox-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:4px;font-weight:600}
+.sbox.s-t .sbox-n{color:var(--p1)}.sbox.s-c .sbox-n{color:var(--green)}.sbox.s-w .sbox-n{color:var(--red)}
+/* Review */
+.rev-hd{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:13px 17px;border-radius:12px;cursor:pointer;margin-bottom:10px;
+  background:rgba(255,255,255,.04);border:1px solid var(--gb);
+  font-weight:600;font-size:14px;transition:border-color .2s,background .2s;
+}
+.rev-hd:hover{border-color:rgba(108,99,255,.4);background:rgba(108,99,255,.07);color:var(--p1)}
+.rev-list{display:none;flex-direction:column;gap:9px;margin-bottom:20px}
+.rev-list.on{display:flex}
+.rev-item{padding:14px 16px;border-radius:12px;font-size:13px;line-height:1.55;background:rgba(255,255,255,.03);border:1px solid var(--gb)}
+.rev-item.ri-ok{border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.07)}
+.rev-item.ri-err{border-color:rgba(244,63,94,.3);background:rgba(244,63,94,.07)}
+.rev-q{font-weight:600;color:var(--txt);margin-bottom:7px}
+.rev-ans{display:flex;flex-wrap:wrap;gap:9px;font-size:12px;font-weight:600}
+.ra-ok{color:var(--green)}.ra-err{color:var(--red)}
+.result-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+
+/* ═══════════════════════════════════
+   ADMIN PAGE
+═══════════════════════════════════ */
+.admin-wrap{display:flex;flex:1;min-height:0;overflow:hidden}
+.sidebar{
+  width:215px;flex-shrink:0;
+  background:rgba(7,9,26,.97);border-right:1px solid var(--gb);
+  padding:14px 0;display:flex;flex-direction:column;overflow-y:auto;
+}
+.sb-sec{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:0 18px;margin:14px 0 6px}
+.sb-item{
+  display:flex;align-items:center;gap:10px;padding:11px 18px;
+  cursor:pointer;font-size:13px;font-weight:500;color:var(--txt2);
+  border-left:3px solid transparent;transition:all .18s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.sb-item:hover{background:rgba(108,99,255,.08);color:var(--p1)}
+.sb-item.on{background:rgba(108,99,255,.12);color:var(--p1);border-left-color:var(--p1);font-weight:700}
+.sb-ico{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.a-main{flex:1;overflow-y:auto;padding:24px}
+.a-tab{display:none}.a-tab.on{display:block;animation:fadeUp .35s ease both}
+.a-title{font-size:19px;font-weight:800;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+/* Dash cards */
+.dash-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:24px}
+.dc{padding:20px 16px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--gb);text-align:center;transition:transform .2s}
+.dc:hover{transform:translateY(-2px)}
+.dc-n{font-size:30px;font-weight:900}.dc-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:4px;font-weight:600}
+.dc-p .dc-n{color:var(--p1)}.dc-g .dc-n{color:var(--green)}.dc-o .dc-n{color:var(--gold)}.dc-r .dc-n{color:var(--red)}
+/* Tables */
+.tbl-wrap{border-radius:14px;overflow:hidden;overflow-x:auto;margin-bottom:18px;background:rgba(255,255,255,.03);border:1px solid var(--gb)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{padding:10px 14px;background:rgba(255,255,255,.04);border-bottom:1px solid var(--gb);text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+td{padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--txt);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.empty-td{text-align:center;color:var(--muted);padding:32px!important;font-size:14px}
+/* A-Forms */
+.a-form{padding:22px;border-radius:14px;margin-bottom:18px;background:rgba(255,255,255,.03);border:1px solid var(--gb)}
+.a-form h3{font-size:15px;font-weight:700;margin-bottom:16px;color:var(--txt)}
+.frow{display:flex;gap:11px;flex-wrap:wrap}
+.frow .fg{flex:1;min-width:170px}
+.opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px}
+.opt-row{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--gb);transition:border-color .2s}
+.opt-row:focus-within{border-color:var(--p1)}
+.opt-ltr{font-weight:800;font-size:12px;color:var(--p1);width:16px;flex-shrink:0}
+.opt-inp{flex:1;background:none;border:none;color:var(--txt);font-size:13px;font-family:var(--font);outline:none}
+.ans-btns{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}
+.ans-btn{padding:7px 18px;border-radius:9px;border:1.5px solid var(--gb);background:rgba(255,255,255,.04);color:var(--txt2);cursor:pointer;font-weight:700;font-size:13px;font-family:var(--font);transition:all .18s}
+.ans-btn.on{border-color:var(--green);background:rgba(16,185,129,.14);color:var(--green)}
+/* Filter */
+.fbar{display:flex;gap:9px;margin-bottom:13px;flex-wrap:wrap}
+.fbar .finput,.fbar .fselect{flex:1;min-width:140px}
+/* MCQ items */
+.mcq-item{padding:13px 16px;border-radius:12px;margin-bottom:8px;background:rgba(255,255,255,.03);border:1px solid var(--gb);display:flex;align-items:flex-start;justify-content:space-between;gap:11px;transition:border-color .18s}
+.mcq-item:hover{border-color:rgba(108,99,255,.3)}
+.mcq-body{flex:1;min-width:0}
+.mcq-q{font-size:13px;font-weight:600;margin-bottom:7px;line-height:1.4;color:var(--txt)}
+.mcq-opts{display:flex;flex-wrap:wrap;gap:5px}
+.mc{font-size:11px;padding:2px 8px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid var(--gb);color:var(--txt2);font-weight:500}
+.mc.ans{background:rgba(16,185,129,.14);border-color:rgba(16,185,129,.35);color:var(--green)}
+.mcq-acts{display:flex;gap:4px;flex-shrink:0}
+
+/* ── SOUND TOGGLE ──────────────── */
+.snd-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:30px;border:none;cursor:pointer;
+  font-family:var(--font);font-size:12px;font-weight:700;
+  transition:all .2s ease;user-select:none;
+  background:rgba(255,255,255,.06);border:1px solid var(--gb);color:var(--txt2);
+}
+.snd-btn:hover{border-color:var(--p1);color:var(--p1);background:rgba(108,99,255,.1)}
+.snd-btn.snd-on{background:rgba(108,99,255,.18);border-color:rgba(108,99,255,.4);color:var(--p1)}
+.snd-btn .snd-icon{font-size:15px;line-height:1}
+
+/* ── SOUND PANEL ───────────────── */
+.snd-panel{
+  position:fixed;bottom:24px;left:24px;z-index:500;
+  padding:16px 18px;border-radius:16px;
+  background:rgba(13,17,48,.92);backdrop-filter:blur(20px);
+  border:1px solid var(--gb);box-shadow:0 16px 48px rgba(0,0,0,.5);
+  min-width:220px;animation:fadeUp .3s ease;
+  display:none;
+}
+.snd-panel.on{display:block}
+.snd-panel-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:14px}
+.snd-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.snd-row:last-child{margin-bottom:0}
+.snd-label{font-size:13px;font-weight:600;color:var(--txt2);display:flex;align-items:center;gap:7px}
+/* Toggle switch */
+.toggle{position:relative;width:40px;height:22px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle-track{
+  position:absolute;inset:0;border-radius:11px;
+  background:rgba(255,255,255,.1);border:1px solid var(--gb);
+  cursor:pointer;transition:all .25s ease;
+}
+.toggle input:checked+.toggle-track{background:var(--p1);border-color:var(--p1);box-shadow:0 0 10px rgba(108,99,255,.4)}
+.toggle-thumb{
+  position:absolute;top:2px;left:2px;width:16px;height:16px;
+  border-radius:50%;background:#fff;
+  transition:transform .25s cubic-bezier(.22,1,.36,1);
+  box-shadow:0 1px 4px rgba(0,0,0,.3);pointer-events:none;
+}
+.toggle input:checked~.toggle-thumb{transform:translateX(18px)}
+/* Volume slider */
+.vol-slider{
+  width:100%;height:4px;border-radius:2px;margin-top:10px;
+  -webkit-appearance:none;appearance:none;
+  background:rgba(255,255,255,.1);outline:none;cursor:pointer;
+  border:none;accent-color:var(--p1);
+}
+.vol-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--p1);cursor:pointer;box-shadow:0 0 8px rgba(108,99,255,.5)}
+
+/* Answer glow animations */
+@keyframes glowCorrect{
+  0%{box-shadow:0 0 0 0 rgba(16,185,129,0)}
+  30%{box-shadow:0 0 0 10px rgba(16,185,129,.25),0 0 30px rgba(16,185,129,.2)}
+  100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}
+}
+@keyframes glowWrong{
+  0%{box-shadow:0 0 0 0 rgba(244,63,94,0)}
+  30%{box-shadow:0 0 0 10px rgba(244,63,94,.25),0 0 30px rgba(244,63,94,.2)}
+  100%{box-shadow:0 0 0 0 rgba(244,63,94,0)}
+}
+.opt.correct{animation:glowCorrect .8s ease forwards,flipL .45s ease}
+.opt.wrong{animation:glowWrong .6s ease forwards,shake .45s ease}
+
+/* ── RESPONSIVE ────────────────── */
+@media(max-width:768px){
+  .quiz-nav{grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:9px;padding:10px 14px}
+  .qnav-c{grid-column:span 2}.progress-wrap{width:100%}
+  .q-card{padding:20px 14px}.q-text{font-size:15px}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .stats-row .sbox:last-child{grid-column:span 2}
+  .ch-grid{grid-template-columns:1fr}.ch-full{grid-column:span 1}
+  .admin-wrap{flex-direction:column}
+  .sidebar{width:100%;flex-direction:row;overflow-x:auto;padding:0;border-right:none;border-bottom:1px solid var(--gb);flex-shrink:0}
+  .sb-sec{display:none}
+  .sb-item{flex-direction:column;gap:2px;font-size:10px;padding:9px 12px;white-space:nowrap;border-left:none;border-bottom:3px solid transparent;flex-shrink:0}
+  .sb-item.on{border-left:none;border-bottom-color:var(--p1)}
+  .sb-ico{font-size:18px;width:auto}
+  .a-main{padding:14px}
+  .opts-grid{grid-template-columns:1fr}
+  .result-btns{flex-direction:column}
+  .result-card{padding:22px 16px}
+  .nav{padding:11px 14px}
+  .login-card{padding:22px 16px}
+}
+@media(max-width:400px){
+  .login-title{font-size:28px}
+  .qnav-r{gap:8px}
+  .dash-row{grid-template-columns:1fr 1fr}
+}
+@media(min-width:1100px){
+  .q-card{padding:44px}.q-text{font-size:20px}
+  .a-main{padding:32px}
+}
+</style>
+</head>
+<body>
+
+<!-- BG -->
+<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+<canvas id="cvs"></canvas>
+
+<!-- SVG DEFS -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6c63ff"/>
+      <stop offset="50%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- LOADER -->
+<div id="loader"><div class="spin-ring"></div><div class="ld-txt" id="ld-txt">LOADING</div></div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- ═══════════════════════════
+     LOGIN PAGE
+═══════════════════════════ -->
+<div class="pg on" id="pg-login">
+  <div class="login-wrap">
+    <div class="login-hero">
+      <div class="login-orb">⚡</div>
+      <div class="login-title gt">TestifyX</div>
+      <div class="login-sub">10th Grade CS · Smart MCQ Platform</div>
+    </div>
+    <div class="glass login-card">
+      <div class="fg">
+        <label class="flabel">Username</label>
+        <input class="finput" id="li-user" type="text" placeholder="Enter username" autocomplete="username">
+      </div>
+      <div class="fg" style="margin-bottom:8px">
+        <label class="flabel">Password</label>
+        <input class="finput" id="li-pass" type="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <div class="err" id="li-err">❌ Invalid username or password</div>
+      <button class="btn btn-p btn-full" id="li-btn" style="margin-top:18px;padding:14px;font-size:15px">Sign In →</button>
+    </div>
+    <div class="login-credit">Created &amp; managed by <b>Shahzaib Malik</b></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     STUDENT NAME PAGE
+═══════════════════════════ -->
+<div class="pg" id="pg-name">
+  <nav class="nav">
+    <div class="brand"><div class="brand-ico">⚡</div><span class="gt">TestifyX</span></div>
+    <div class="nav-r"><button class="snd-btn snd-on" id="snd-toggle-name" onclick="toggleSndPanel()" title="Sound Settings"><span class="snd-icon">🔊</span><span id="snd-lbl-name">Sound</span></button><button class="btn btn-o btn-sm" onclick="logout()">Logout</button></div>
+  </nav>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 16px">
+    <div class="glass center-card">
+      <div class="pg-title">👋 Welcome!</div>
+      <div class="pg-sub">Enter your full name to start the quiz.</div>
+      <div class="fg">
+        <label class="flabel">Your Full Name</label>
+        <input class="finput" id="sn-input" type="text" placeholder="e.g. Ali Hassan" autocomplete="name">
+      </div>
+      <div class="err" id="sn-err">Please enter your name.</div>
+      <button class="btn btn-p btn-full" id="sn-btn" style="margin-top:14px">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     CHAPTER PAGE
+═══════════════════════════ -->
+<div class="pg" id="pg-chapter">
+  <nav class="nav">
+    <div class="brand"><div class="brand-ico">⚡</div><span class="gt">TestifyX</span></div>
+    <div class="nav-r">
+      <div class="u-chip"><div class="u-ava" id="ch-ava">S</div><span class="u-name" id="ch-name"></span></div>
+      <button class="snd-btn snd-on" onclick="toggleSndPanel()" title="Sound Settings"><span class="snd-icon">🔊</span></button>
+      <button class="btn btn-o btn-sm" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:28px 16px">
+    <div class="glass ch-wrap">
+      <div class="pg-title">📖 Choose Your Test</div>
+      <div class="pg-sub" style="margin-bottom:0">Chapter tests: <b style="color:var(--p1)">30 questions</b> each.</div>
+      <div class="ch-grid">
+        <div class="ch-card" onclick="SND.click();startQuiz(1)"><div class="ch-icon">💻</div><div class="ch-num">01</div><div class="ch-name">Introduction to Programming</div></div>
+        <div class="ch-card" onclick="SND.click();startQuiz(2)"><div class="ch-icon">🔢</div><div class="ch-num">02</div><div class="ch-name">Variables &amp; Operators</div></div>
+        <div class="ch-card" onclick="SND.click();startQuiz(3)"><div class="ch-icon">🔀</div><div class="ch-num">03</div><div class="ch-name">Conditional Control</div></div>
+        <div class="ch-card" onclick="SND.click();startQuiz(4)"><div class="ch-icon">🔁</div><div class="ch-num">04</div><div class="ch-name">Arrays &amp; Loops</div></div>
+        <div class="ch-card" onclick="SND.click();startQuiz(5)"><div class="ch-icon">⚙️</div><div class="ch-num">05</div><div class="ch-name">Functions</div></div>
+        <div class="ch-card ch-full" onclick="SND.click();startQuiz('full')"><div class="ch-icon">📚</div><div class="ch-num">Full Book Test — All Chapters</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     QUIZ PAGE
+═══════════════════════════ -->
+<div class="pg" id="pg-quiz">
+  <div class="quiz-nav">
+    <div class="qnav-l">
+      <div class="qnav-student"><span id="q-emoji">🎓</span><span id="q-sname" style="max-width:140px;overflow:hidden;text-overflow:ellipsis"></span></div>
+      <div class="qnav-ch" id="q-chlabel"></div>
+    </div>
+    <div class="qnav-c">
+      <div class="qnav-counter">Q <strong id="q-num">1</strong><span> / <span id="q-total">30</span></span></div>
+      <div class="progress-wrap"><div class="progress-bar" id="q-prog" style="width:0%"></div></div>
+    </div>
+    <div class="qnav-r">
+      <div class="qstat qs-ok">✅ <span id="q-corr">0</span></div>
+      <div class="qstat qs-no">❌ <span id="q-wrong">0</span></div>
+      <div class="timer-wrap">
+        <svg width="46" height="46" viewBox="0 0 46 46">
+          <circle class="t-bg" cx="23" cy="23" r="20"/>
+          <circle class="t-arc" id="t-arc" cx="23" cy="23" r="20"/>
+        </svg>
+        <div class="t-num" id="t-num">60</div>
+      </div>
+      <!-- Cancel + Logout in corner -->
+      <button class="snd-btn snd-on" onclick="toggleSndPanel()" title="Sound Settings"><span class="snd-icon">🔊</span></button>
+      <button class="btn btn-o btn-icon" title="Cancel Quiz" onclick="cancelQuiz()" style="font-size:14px;padding:8px 10px;border-radius:10px;gap:4px;white-space:nowrap">✕ Cancel</button>
+      <button class="btn btn-o btn-icon" title="Logout" onclick="logout()" style="font-size:18px">⏻</button>
+    </div>
+  </div>
+  <div class="quiz-body">
+    <div class="glass q-card">
+      <div class="q-badge" id="q-badge">📖 Chapter 1</div>
+      <div class="q-text" id="q-text">Loading...</div>
+      <div class="opts" id="q-opts"></div>
+      <div class="ans-fb" id="ans-fb">
+        <span class="ans-emoji" id="ans-emoji">🎉</span>
+        <span id="ans-txt">Correct!</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     RESULT PAGE
+═══════════════════════════ -->
+<div class="pg" id="pg-result">
+  <nav class="nav">
+    <div class="brand"><div class="brand-ico">⚡</div><span class="gt">TestifyX</span></div>
+    <div class="nav-r"><button class="snd-btn snd-on" onclick="toggleSndPanel()" title="Sound Settings"><span class="snd-icon">🔊</span></button><button class="btn btn-o btn-sm" onclick="logout()">Logout</button></div>
+  </nav>
+  <div class="result-body">
+    <div class="glass result-card">
+      <div class="r-top">
+        <span class="r-emoji" id="r-emoji">🏆</span>
+        <div class="ring-wrap">
+          <svg class="ring-svg" width="130" height="130" viewBox="0 0 130 130">
+            <circle class="ring-bg" cx="65" cy="65" r="60"/>
+            <circle class="ring-arc" id="ring-arc" cx="65" cy="65" r="60"/>
+          </svg>
+          <div class="ring-mid">
+            <div class="ring-pct" id="ring-pct">0%</div>
+            <div class="ring-lbl">Score</div>
+          </div>
+        </div>
+        <div class="r-title" id="r-title">Quiz Complete!</div>
+        <div class="r-info" id="r-info"></div>
+        <div class="pass-pill" id="r-pill">PASS</div>
+      </div>
+      <div class="stats-row">
+        <div class="sbox s-t"><div class="sbox-n" id="r-tot">0</div><div class="sbox-l">Total</div></div>
+        <div class="sbox s-c"><div class="sbox-n" id="r-corr">0</div><div class="sbox-l">Correct</div></div>
+        <div class="sbox s-w"><div class="sbox-n" id="r-wrong">0</div><div class="sbox-l">Wrong</div></div>
+      </div>
+      <div class="rev-hd" onclick="toggleRev()"><span>📋 Review Answers</span><span id="rev-arr">▼</span></div>
+      <div class="rev-list" id="rev-list"></div>
+      <div class="result-btns">
+        <button class="btn btn-o" onclick="goChapter()">← Choose Chapter</button>
+        <button class="btn btn-p" onclick="retake()">🔁 Retake Quiz</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     ADMIN PAGE
+═══════════════════════════ -->
+<div class="pg" id="pg-admin">
+  <nav class="nav">
+    <div class="brand"><div class="brand-ico">⚡</div><span class="gt">TestifyX</span><span style="color:var(--muted);font-size:13px;font-weight:400;margin-left:4px">Admin</span></div>
+    <div class="nav-r">
+      <div class="u-chip" style="background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.3)">
+        <div class="u-ava" style="background:linear-gradient(135deg,var(--gold),#f97316)">👑</div>
+        <span class="u-name" style="color:var(--gold)">Shahzaib Malik</span>
+      </div>
+      <span class="chip chip-gold">Super Admin</span>
+      <button class="btn btn-o btn-sm" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+  <div class="admin-wrap">
+    <div class="sidebar">
+      <div class="sb-sec">Menu</div>
+      <div class="sb-item on" onclick="aTab('dashboard')"><span class="sb-ico">📊</span><span>Dashboard</span></div>
+      <div class="sb-item" onclick="aTab('mcqs')"><span class="sb-ico">📝</span><span>MCQs</span></div>
+      <div class="sb-item" onclick="aTab('students')"><span class="sb-ico">👨‍🎓</span><span>Students</span></div>
+      <div class="sb-item" onclick="aTab('results')"><span class="sb-ico">📈</span><span>Results</span></div>
+    </div>
+    <div class="a-main">
+
+      <div class="a-tab on" id="at-dashboard">
+        <div class="a-title">📊 Dashboard</div>
+        <div class="dash-row">
+          <div class="dc dc-p"><div class="dc-n" id="a-nmcqs">220</div><div class="dc-l">MCQs</div></div>
+          <div class="dc dc-g"><div class="dc-n" id="a-nstu">0</div><div class="dc-l">Students</div></div>
+          <div class="dc dc-o"><div class="dc-n" id="a-natm">0</div><div class="dc-l">Attempts</div></div>
+          <div class="dc dc-r"><div class="dc-n" id="a-npass">0%</div><div class="dc-l">Pass Rate</div></div>
+        </div>
+        <div class="a-title" style="font-size:15px">Recent Results</div>
+        <div class="tbl-wrap">
+          <table><thead><tr><th>Student</th><th>Chapter</th><th>Score</th><th>Result</th><th>Date</th></tr></thead>
+          <tbody id="a-recent"></tbody></table>
+        </div>
+      </div>
+
+      <div class="a-tab" id="at-mcqs">
+        <div class="a-title">📝 Manage MCQs</div>
+        <div class="a-form glass-sm">
+          <h3 id="mcq-form-title">➕ Add New MCQ</h3>
+          <input type="hidden" id="edit-id">
+          <div class="frow">
+            <div class="fg" style="flex:1;min-width:180px">
+              <label class="flabel">Chapter</label>
+              <select class="fselect" id="m-ch">
+                <option value="1">Chapter 1 – Introduction</option>
+                <option value="2">Chapter 2 – Variables &amp; Operators</option>
+                <option value="3">Chapter 3 – Control Statements</option>
+                <option value="4">Chapter 4 – Arrays &amp; Loops</option>
+                <option value="5">Chapter 5 – Functions</option>
+              </select>
+            </div>
+          </div>
+          <div class="fg"><label class="flabel">Question</label><textarea class="ftxt" id="m-q" placeholder="Type question..."></textarea></div>
+          <label class="flabel" style="margin-bottom:9px;display:block">Options</label>
+          <div class="opts-grid">
+            <div class="opt-row"><span class="opt-ltr">A</span><input class="opt-inp" id="m-a" placeholder="Option A"></div>
+            <div class="opt-row"><span class="opt-ltr">B</span><input class="opt-inp" id="m-b" placeholder="Option B"></div>
+            <div class="opt-row"><span class="opt-ltr">C</span><input class="opt-inp" id="m-c" placeholder="Option C"></div>
+            <div class="opt-row"><span class="opt-ltr">D</span><input class="opt-inp" id="m-d" placeholder="Option D"></div>
+          </div>
+          <div class="fg">
+            <label class="flabel">Correct Answer</label>
+            <div class="ans-btns">
+              <div class="ans-btn" onclick="pickAns('a')">A</div>
+              <div class="ans-btn" onclick="pickAns('b')">B</div>
+              <div class="ans-btn" onclick="pickAns('c')">C</div>
+              <div class="ans-btn" onclick="pickAns('d')">D</div>
+            </div>
+            <input type="hidden" id="m-ans">
+          </div>
+          <div style="display:flex;gap:9px;flex-wrap:wrap">
+            <button class="btn btn-p btn-sm" onclick="saveMCQ()">💾 Save</button>
+            <button class="btn btn-o btn-sm" onclick="clearMcqForm()">✕ Clear</button>
+          </div>
+        </div>
+        <div class="fbar">
+          <input class="finput" id="m-search" placeholder="🔍 Search..." oninput="renderMCQs()">
+          <select class="fselect" id="m-fch" onchange="renderMCQs()" style="max-width:170px">
+            <option value="">All Chapters</option>
+            <option value="1">Chapter 1</option><option value="2">Chapter 2</option>
+            <option value="3">Chapter 3</option><option value="4">Chapter 4</option><option value="5">Chapter 5</option>
+          </select>
+        </div>
+        <div id="mcq-list"></div>
+      </div>
+
+      <div class="a-tab" id="at-students">
+        <div class="a-title">👨‍🎓 Students</div>
+        <div class="a-form">
+          <h3>➕ Add Student</h3>
+          <div class="frow">
+            <div class="fg"><label class="flabel">Username</label><input class="finput" id="s-usr" placeholder="username"></div>
+            <div class="fg"><label class="flabel">Password</label><input class="finput" id="s-pwd" type="password" placeholder="password"></div>
+          </div>
+          <div class="fg"><label class="flabel">Full Name</label><input class="finput" id="s-nm" placeholder="Full name"></div>
+          <button class="btn btn-p btn-sm" onclick="addStudent()">➕ Add</button>
+        </div>
+        <div class="tbl-wrap">
+          <table><thead><tr><th>Name</th><th>Username</th><th>Attempts</th><th>Best</th><th></th></tr></thead>
+          <tbody id="a-stu"></tbody></table>
+        </div>
+      </div>
+
+      <div class="a-tab" id="at-results">
+        <div class="a-title">📈 Results</div>
+        <div class="fbar">
+          <input class="finput" id="r-s" placeholder="🔍 Search student..." oninput="renderResults()">
+          <select class="fselect" id="r-ch" onchange="renderResults()" style="max-width:170px">
+            <option value="">All Chapters</option>
+            <option value="1">Ch 1</option><option value="2">Ch 2</option>
+            <option value="3">Ch 3</option><option value="4">Ch 4</option>
+            <option value="5">Ch 5</option><option value="full">Full Book</option>
+          </select>
+        </div>
+        <div class="tbl-wrap">
+          <table><thead><tr><th>Student</th><th>Chapter</th><th>Total</th><th>Correct</th><th>Score</th><th>Result</th><th>Date</th></tr></thead>
+          <tbody id="a-res"></tbody></table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Sound Panel -->
+<div class="snd-panel" id="snd-panel">
+  <div class="snd-panel-title">🎵 Sound Settings</div>
+  <div class="snd-row">
+    <span class="snd-label">🔊 All Sounds</span>
+    <label class="toggle">
+      <input type="checkbox" id="snd-master" checked onchange="updateSndSettings()">
+      <div class="toggle-track"></div><div class="toggle-thumb"></div>
+    </label>
+  </div>
+  <div class="snd-row">
+    <span class="snd-label">✅ Correct Answer</span>
+    <label class="toggle">
+      <input type="checkbox" id="snd-correct" checked onchange="updateSndSettings()">
+      <div class="toggle-track"></div><div class="toggle-thumb"></div>
+    </label>
+  </div>
+  <div class="snd-row">
+    <span class="snd-label">❌ Wrong Answer</span>
+    <label class="toggle">
+      <input type="checkbox" id="snd-wrong" checked onchange="updateSndSettings()">
+      <div class="toggle-track"></div><div class="toggle-thumb"></div>
+    </label>
+  </div>
+  <div class="snd-row">
+    <span class="snd-label">🖱️ Click Tap</span>
+    <label class="toggle">
+      <input type="checkbox" id="snd-click" checked onchange="updateSndSettings()">
+      <div class="toggle-track"></div><div class="toggle-thumb"></div>
+    </label>
+  </div>
+  <div class="snd-row">
+    <span class="snd-label">👋 Welcome</span>
+    <label class="toggle">
+      <input type="checkbox" id="snd-welcome" checked onchange="updateSndSettings()">
+      <div class="toggle-track"></div><div class="toggle-thumb"></div>
+    </label>
+  </div>
+  <div class="snd-row">
+    <span class="snd-label">🚪 Logout</span>
+    <label class="toggle">
+      <input type="checkbox" id="snd-logout" checked onchange="updateSndSettings()">
+      <div class="toggle-track"></div><div class="toggle-thumb"></div>
+    </label>
+  </div>
+  <div style="margin-top:12px;border-top:1px solid var(--gb);padding-top:12px">
+    <div style="font-size:11px;color:var(--muted);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.07em">🔈 Volume</div>
+    <input class="vol-slider" type="range" id="snd-vol" min="0" max="100" value="70" oninput="updateSndSettings()">
+  </div>
+</div>
+
+<!-- Cancel Quiz Modal -->
+<div class="modal-bg" id="cancel-modal">
+  <div class="glass modal-box">
+    <h3>⚠️ Cancel Quiz?</h3>
+    <p style="color:var(--txt2);font-size:14px;margin-top:6px">Your progress will be lost. Are you sure you want to quit?</p>
+    <div class="modal-acts">
+      <button class="btn btn-o btn-sm" onclick="document.getElementById('cancel-modal').classList.remove('on')">Keep Going</button>
+      <button class="btn btn-danger btn-sm" onclick="confirmCancel()">Yes, Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal-bg" id="del-modal">
+  <div class="glass modal-box">
+    <h3>🗑️ Confirm Delete</h3>
+    <p style="color:var(--txt2);font-size:14px;margin-top:6px">This cannot be undone. Continue?</p>
+    <div class="modal-acts">
+      <button class="btn btn-o btn-sm" onclick="document.getElementById('del-modal').classList.remove('on')">Cancel</button>
+      <button class="btn btn-danger btn-sm" id="del-confirm">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   WEB AUDIO SOUND ENGINE
+   All sounds synthesised via Web Audio API – zero external files
+═══════════════════════════════════════════════════════ */
+const SND={
+  ctx:null,
+  enabled:true,
+  settings:{master:true,correct:true,wrong:true,click:true,welcome:true,logout:true},
+  vol:0.70,
+  _busy:{},        // prevent overlap per sound type
+  _panelOpen:false,
+
+  /* Lazy-init AudioContext (needs user gesture first) */
+  init(){
+    if(this.ctx)return;
+    try{this.ctx=new(window.AudioContext||window.webkitAudioContext)();}catch{}
+  },
+
+  /* Resume context if suspended (browser autoplay policy) */
+  resume(){
+    if(this.ctx&&this.ctx.state==='suspended')this.ctx.resume();
+  },
+
+  /* Core play — builds oscillator/buffer graph */
+  _play(type,buildFn){
+    if(!this.settings.master)return;
+    if(!this.settings[type])return;
+    if(this._busy[type])return;
+    this._busy[type]=true;
+    this.init();this.resume();
+    if(!this.ctx){this._busy[type]=false;return;}
+    try{
+      const gain=this.ctx.createGain();
+      gain.gain.value=this.vol;
+      gain.connect(this.ctx.destination);
+      const dur=buildFn(this.ctx,gain);
+      setTimeout(()=>{this._busy[type]=false;},((dur||0.8)+0.05)*1000);
+    }catch{this._busy[type]=false;}
+  },
+
+  /* ── CORRECT: soft golden bell chime (two ascending notes) */
+  correct(){
+    this._play('correct',(ctx,master)=>{
+      const notes=[523.25,783.99]; // C5, G5
+      notes.forEach((freq,i)=>{
+        const osc=ctx.createOscillator();
+        const g=ctx.createGain();
+        const t=ctx.currentTime+i*0.13;
+        osc.type='sine';osc.frequency.setValueAtTime(freq,t);
+        // Overtone for richness
+        const osc2=ctx.createOscillator();
+        const g2=ctx.createGain();
+        osc2.type='sine';osc2.frequency.setValueAtTime(freq*2,t);
+        g2.gain.setValueAtTime(0.18*this.vol,t);
+        g2.gain.exponentialRampToValueAtTime(0.001,t+0.65);
+        osc2.connect(g2);g2.connect(master);osc2.start(t);osc2.stop(t+0.65);
+
+        g.gain.setValueAtTime(0,t);
+        g.gain.linearRampToValueAtTime(0.55*this.vol,t+0.02);
+        g.gain.exponentialRampToValueAtTime(0.001,t+0.72);
+        osc.connect(g);g.connect(master);
+        osc.start(t);osc.stop(t+0.75);
+      });
+      return 0.88;
+    });
+  },
+
+  /* ── WRONG: gentle low thud/buzz, not harsh */
+  wrong(){
+    this._play('wrong',(ctx,master)=>{
+      const osc=ctx.createOscillator();
+      const g=ctx.createGain();
+      osc.type='sawtooth';
+      osc.frequency.setValueAtTime(180,ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(90,ctx.currentTime+0.45);
+      // Low-pass to soften
+      const lp=ctx.createBiquadFilter();
+      lp.type='lowpass';lp.frequency.value=400;lp.Q.value=1.2;
+      g.gain.setValueAtTime(0.5*this.vol,ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.52);
+      osc.connect(lp);lp.connect(g);g.connect(master);
+      osc.start(ctx.currentTime);osc.stop(ctx.currentTime+0.55);
+      return 0.55;
+    });
+  },
+
+  /* ── CLICK: crisp micro-tick */
+  click(){
+    this._play('click',(ctx,master)=>{
+      const buf=ctx.createBuffer(1,ctx.sampleRate*0.04,ctx.sampleRate);
+      const d=buf.getChannelData(0);
+      for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,6);
+      const src=ctx.createBufferSource();
+      const g=ctx.createGain();
+      const hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=2200;
+      src.buffer=buf;
+      g.gain.setValueAtTime(0.35*this.vol,ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.045);
+      src.connect(hp);hp.connect(g);g.connect(master);
+      src.start(ctx.currentTime);
+      return 0.05;
+    });
+  },
+
+  /* ── WELCOME: soft ascending 3-note startup chime */
+  welcome(){
+    this._play('welcome',(ctx,master)=>{
+      const freqs=[330,440,523.25,659.25]; // E4, A4, C5, E5
+      freqs.forEach((freq,i)=>{
+        const osc=ctx.createOscillator();
+        const g=ctx.createGain();
+        const t=ctx.currentTime+i*0.14;
+        osc.type='sine';osc.frequency.setValueAtTime(freq,t);
+        const osc2=ctx.createOscillator();
+        const g2=ctx.createGain();
+        osc2.type='triangle';osc2.frequency.setValueAtTime(freq*1.5,t);
+        g2.gain.setValueAtTime(0.12*this.vol,t);
+        g2.gain.exponentialRampToValueAtTime(0.001,t+0.7);
+        osc2.connect(g2);g2.connect(master);osc2.start(t);osc2.stop(t+0.75);
+        g.gain.setValueAtTime(0,t);
+        g.gain.linearRampToValueAtTime(0.38*this.vol,t+0.03);
+        g.gain.exponentialRampToValueAtTime(0.001,t+0.75);
+        osc.connect(g);g.connect(master);
+        osc.start(t);osc.stop(t+0.78);
+      });
+      return 0.55+4*0.14;
+    });
+  },
+
+  /* ── LOGOUT: smooth descending whoosh + fade */
+  logout(){
+    this._play('logout',(ctx,master)=>{
+      // Noise whoosh
+      const buf=ctx.createBuffer(1,ctx.sampleRate*0.6,ctx.sampleRate);
+      const d=buf.getChannelData(0);
+      for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+      const src=ctx.createBufferSource();src.buffer=buf;
+      const bp=ctx.createBiquadFilter();bp.type='bandpass';
+      bp.frequency.setValueAtTime(1800,ctx.currentTime);
+      bp.frequency.exponentialRampToValueAtTime(400,ctx.currentTime+0.55);
+      bp.Q.value=0.8;
+      const g=ctx.createGain();
+      g.gain.setValueAtTime(0.28*this.vol,ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.58);
+      src.connect(bp);bp.connect(g);g.connect(master);src.start(ctx.currentTime);
+      // Low tone sweep
+      const osc=ctx.createOscillator();
+      const og=ctx.createGain();
+      osc.type='sine';
+      osc.frequency.setValueAtTime(440,ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(220,ctx.currentTime+0.5);
+      og.gain.setValueAtTime(0.22*this.vol,ctx.currentTime);
+      og.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.5);
+      osc.connect(og);og.connect(master);osc.start(ctx.currentTime);osc.stop(ctx.currentTime+0.52);
+      return 0.6;
+    });
+  },
+};
+
+/* Sound panel open/close */
+function toggleSndPanel(){
+  SND.init();SND.resume();
+  SND._panelOpen=!SND._panelOpen;
+  document.getElementById('snd-panel').classList.toggle('on',SND._panelOpen);
+}
+/* Close panel on outside click */
+document.addEventListener('click',e=>{
+  if(SND._panelOpen&&!e.target.closest('#snd-panel')&&!e.target.closest('.snd-btn')){
+    SND._panelOpen=false;document.getElementById('snd-panel').classList.remove('on');
+  }
+},{passive:true});
+
+/* Update all settings from panel */
+function updateSndSettings(){
+  SND.settings.master=document.getElementById('snd-master').checked;
+  SND.settings.correct=document.getElementById('snd-correct').checked;
+  SND.settings.wrong=document.getElementById('snd-wrong').checked;
+  SND.settings.click=document.getElementById('snd-click').checked;
+  SND.settings.welcome=document.getElementById('snd-welcome').checked;
+  SND.settings.logout=document.getElementById('snd-logout').checked;
+  SND.vol=document.getElementById('snd-vol').value/100;
+  /* Update all sound toggle button labels */
+  const on=SND.settings.master;
+  document.querySelectorAll('.snd-btn .snd-icon').forEach(el=>{el.textContent=on?'🔊':'🔇';});
+  document.querySelectorAll('.snd-btn').forEach(el=>{el.classList.toggle('snd-on',on);});
+  /* Save prefs */
+  try{localStorage.setItem('txsnd',JSON.stringify({...SND.settings,vol:SND.vol}));}catch{}
+}
+/* Load saved prefs */
+function loadSndPrefs(){
+  try{
+    const p=JSON.parse(localStorage.getItem('txsnd')||'{}');
+    if(p.master!==undefined)SND.settings.master=p.master;
+    if(p.correct!==undefined)SND.settings.correct=p.correct;
+    if(p.wrong!==undefined)SND.settings.wrong=p.wrong;
+    if(p.click!==undefined)SND.settings.click=p.click;
+    if(p.welcome!==undefined)SND.settings.welcome=p.welcome;
+    if(p.logout!==undefined)SND.settings.logout=p.logout;
+    if(p.vol!==undefined)SND.vol=p.vol;
+    document.getElementById('snd-master').checked=SND.settings.master;
+    document.getElementById('snd-correct').checked=SND.settings.correct;
+    document.getElementById('snd-wrong').checked=SND.settings.wrong;
+    document.getElementById('snd-click').checked=SND.settings.click;
+    document.getElementById('snd-welcome').checked=SND.settings.welcome;
+    document.getElementById('snd-logout').checked=SND.settings.logout;
+    document.getElementById('snd-vol').value=Math.round(SND.vol*100);
+    const on=SND.settings.master;
+    document.querySelectorAll('.snd-btn .snd-icon').forEach(el=>{el.textContent=on?'🔊':'🔇';});
+    document.querySelectorAll('.snd-btn').forEach(el=>{el.classList.toggle('snd-on',on);});
+  }catch{}
+}
+
+/* ═══════════════════════════════════════════════════════
+   EMOJI DATA
+═══════════════════════════════════════════════════════ */
+const CE=['🎉','✨','🌟','🔥','💯','🥳','👏','🎯','🏆','💪','🚀','⭐','💎','🤩','😎','💥'];
+const WE=['🤔','💭','😅','📖','✏️','🔄','💡','🧐','😲'];
+const PE=['🏆','🎉','🥇','🎊','⭐','🌟','🔥','💯','🤩','👑'];
+const FE=['😔','📖','💪','🔄','🧠','✏️','💡','🌱'];
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+
+const CHN={1:'Introduction to Programming',2:'Variables & Operators',3:'Conditional Control',4:'Arrays & Loops',5:'Functions',full:'Full Book Test'};
+const CHI={1:'💻',2:'🔢',3:'🔀',4:'🔁',5:'⚙️',full:'📚'};
+
+/* ═══════════════════════════════════════════════════════
+   ALL 220 MCQs
+═══════════════════════════════════════════════════════ */
+const DMCQ=[
+  {id:1,ch:1,q:"A software that facilitates programmers in writing computer programs is known as:",opts:["A compiler","An editor","A debugger","An IDE"],ans:"d"},
+  {id:2,ch:1,q:"Every programming language has some primitive building blocks and follows some grammar rules known as its:",opts:["Programming rules","Syntax","Building blocks","Semantic rules"],ans:"b"},
+  {id:3,ch:1,q:"Include statements are written in the ______ section:",opts:["Header","Main","Comments","Print"],ans:"a"},
+  {id:4,ch:1,q:"______ are added in the source code to further explain the techniques and algorithms used:",opts:["Messages","Hints","Comments","Explanations"],ans:"c"},
+  {id:5,ch:1,q:"A float uses ______ bytes of memory:",opts:["3","4","5","6"],ans:"b"},
+  {id:6,ch:1,q:"For initializing a variable, we use the ______ operator:",opts:["?","@","=","<-"],ans:"c"},
+  {id:7,ch:1,q:"______ can be thought of as a container to store constants:",opts:["Box","Variable","Bar","Collection"],ans:"b"},
+  {id:8,ch:1,q:"C language was developed by:",opts:["Dennis Ritchie","Newton","Bill Gates","None of these"],ans:"a"},
+  {id:9,ch:1,q:"IDE stands for:",opts:["International Development Environment","Integrated Development Enrolment","Integrated Development Environment","Inter Development Environment"],ans:"c"},
+  {id:10,ch:1,q:"A text editor is a ______:",opts:["File","Simple page","Software","None of these"],ans:"c"},
+  {id:11,ch:1,q:"Computers only understand and work in ______, consisting of 0s and 1s:",opts:["Roman Language","English Language","Machine Language","High Level Language"],ans:"c"},
+  {id:12,ch:1,q:"The set of rules is known as the ______ of the language:",opts:["Syntax","Disorder","Encode","Sentence"],ans:"a"},
+  {id:13,ch:1,q:"If proper syntax rules are not followed, the compiler generates a:",opts:["Logical Error","Run time error","Simple error","Syntax error"],ans:"d"},
+  {id:14,ch:1,q:"Keyword is also known as:",opts:["Reserved words","Predefined words","Known words","None of these"],ans:"a"},
+  {id:15,ch:1,q:"Which of the following is NOT a reserved word?",opts:["printf","int","else","short"],ans:"a"},
+  {id:16,ch:1,q:"Every C program must contain a ______ function:",opts:["main()","Swap()","Sum()","None of these"],ans:"a"},
+  {id:17,ch:1,q:"A program can be divided into ______ main parts:",opts:["Three","Four","Five","Six"],ans:"a"},
+  {id:18,ch:1,q:"The body of main() is enclosed in:",opts:["()","[]","{}","<>"],ans:"c"},
+  {id:19,ch:1,q:"Each statement of C language ends with a:",opts:[":",";"," .","!"],ans:"b"},
+  {id:20,ch:1,q:"C language is:",opts:["Human language","English Language","Case sensitive","All of these"],ans:"c"},
+  {id:21,ch:1,q:"Statements ignored by the compiler and not executed are:",opts:["Comments","Error","Terminator","Symbol"],ans:"a"},
+  {id:22,ch:1,q:"Single-line comments start with:",opts:["/","//","\\","*//"],ans:"b"},
+  {id:23,ch:1,q:"Multi-line comments start with:",opts:["//","\\*","*/","/*"],ans:"d"},
+  {id:24,ch:1,q:"Multi-line comments end at:",opts:["*/","//","/","\\"],ans:"a"},
+  {id:25,ch:1,q:"Which of the following is a valid identifier name?",opts:["2marks","my marks","my_marks","My Marks"],ans:"c"},
+  {id:26,ch:1,q:"An identifier cannot start with a:",opts:["Letter","Underscore","Digit","None of these"],ans:"c"},
+  {id:27,ch:1,q:"Which of the following is NOT a data type in C?",opts:["int","char","float","number"],ans:"d"},
+  {id:28,ch:1,q:"The data type 'char' stores:",opts:["Integer","A single character","Decimal value","Boolean"],ans:"b"},
+  {id:29,ch:1,q:"The data type used to store numbers with decimal points is:",opts:["int","char","float","long"],ans:"c"},
+  {id:30,ch:1,q:"'int' data type uses ______ bytes of memory:",opts:["2","4","6","8"],ans:"b"},
+  {id:31,ch:1,q:"A variable must be declared before:",opts:["Compiling","Using it","Running","Printing"],ans:"b"},
+  {id:32,ch:1,q:"Which symbol is used to end a statement in C?",opts:[".",":",";","!"],ans:"c"},
+  {id:33,ch:1,q:"Which of the following is a valid variable name?",opts:["1abc","abc 1","abc_1","abc-1"],ans:"c"},
+  {id:34,ch:1,q:"A ______ is a named location in memory that holds data:",opts:["Function","Variable","Operator","Keyword"],ans:"b"},
+  {id:35,ch:1,q:"Which header file is required for printf and scanf?",opts:["conio.h","math.h","stdio.h","string.h"],ans:"c"},
+  {id:36,ch:1,q:"The format specifier for integer in C is:",opts:["%c","%f","%d","%s"],ans:"c"},
+  {id:37,ch:1,q:"A constant value that never changes during program execution is called:",opts:["Variable","Literal","Identifier","Operator"],ans:"b"},
+  {id:38,ch:1,q:"Which keyword is used to define a constant in C?",opts:["var","const","define","constant"],ans:"b"},
+  {id:39,ch:1,q:"Which of the following is NOT a valid escape sequence?",opts:["\\n","\\t","\\a","\\x"],ans:"d"},
+  {id:40,ch:1,q:"The output function in C is:",opts:["scanf","gets","printf","input"],ans:"c"},
+  {id:41,ch:2,q:"Which operator is used to find the remainder?",opts:["*","/","%","+"],ans:"c"},
+  {id:42,ch:2,q:"The expression '5 + 3 * 2' evaluates to:",opts:["16","11","13","10"],ans:"b"},
+  {id:43,ch:2,q:"Which of the following is a relational operator?",opts:["+","==","&&","="],ans:"b"},
+  {id:44,ch:2,q:"The NOT operator in C is represented by:",opts:["~","!","&&","||"],ans:"b"},
+  {id:45,ch:2,q:"Which function is used to hold output on the screen?",opts:["getch()","void main()","scanf()","printf()"],ans:"a"},
+  {id:46,ch:2,q:"Which operator has the highest precedence among the following?",opts:["( )","=","&&","||"],ans:"a"},
+  {id:47,ch:2,q:"What is the output: int a=4; float b=2.2; a=a*b;",opts:["8.8","8.0","8","8.2"],ans:"c"},
+  {id:48,ch:2,q:"The data type float is specified by which format specifier?",opts:["%f","$f","%i","%d"],ans:"a"},
+  {id:49,ch:2,q:"A statement terminator in C language is:",opts:["#",";","%","&"],ans:"b"},
+  {id:50,ch:2,q:"The escape sequence for moving the cursor to the next line is:",opts:["\\a","\\b","\\n","\\t"],ans:"c"},
+  {id:51,ch:2,q:"Which operator is used to assign a value to a variable?",opts:["Assignment operator","Logical operator","Arithmetic operator","Relational operator"],ans:"a"},
+  {id:52,ch:2,q:"The AND operator is denoted by:",opts:["&&","||","!","$$"],ans:"a"},
+  {id:53,ch:2,q:"Which of the following is a valid character in C?",opts:['"here"','"a"',"'9'","None of these"],ans:"c"},
+  {id:54,ch:2,q:"How many main parts does the scanf function have?",opts:["2","3","4","5"],ans:"a"},
+  {id:55,ch:2,q:"Which operator requires only one operand to perform an operation?",opts:["Binary operator","Logical operator","Relational operator","Unary operator"],ans:"d"},
+  {id:56,ch:2,q:"To use the getch() function, which library must be included?",opts:["studio.h","#include.studio","conio.h","void.h"],ans:"c"},
+  {id:57,ch:2,q:"What is the purpose of the escape sequence \\a?",opts:["Display Back slash","Removes previous char","Generates an alert sound","None of these"],ans:"c"},
+  {id:58,ch:2,q:"Relational operators return a result in the form of a:",opts:["Numeric value","Character","Boolean expression","Float value"],ans:"c"},
+  {id:59,ch:2,q:"If both operands are of type int, the result of a division is of type:",opts:["Number","Float","Char","Int"],ans:"d"},
+  {id:60,ch:2,q:"Which escape sequence is used to display a single quote?",opts:["\\\\","\\'","\\n","\\b"],ans:"b"},
+  {id:61,ch:2,q:"In C, the symbol for the assignment operator is:",opts:["&","=","+","%"],ans:"b"},
+  {id:62,ch:2,q:"What is the result of the expression 16 / (5 + 3)?",opts:["3","2","2.2","2.3"],ans:"b"},
+  {id:63,ch:2,q:"Which operator is used to check for the equality of two expressions?",opts:["!=","==","<=","="],ans:"b"},
+  {id:64,ch:2,q:"The OR operator is denoted by:",opts:["&&","||","!","\\"],ans:"b"},
+  {id:65,ch:2,q:"What is the default number of digits displayed after the decimal point for a float?",opts:["6","7","8","9"],ans:"a"},
+  {id:66,ch:2,q:"Which of the following is NOT a type of operator?",opts:["Arithmetic operator","Relational operator","Check operator","Logical operator"],ans:"c"},
+  {id:67,ch:2,q:"The first character of an escape sequence is always:",opts:["&","\\","%","/"],ans:"b"},
+  {id:68,ch:2,q:"A true value in a Boolean expression is represented by:",opts:["0","1","!","&"],ans:"b"},
+  {id:69,ch:2,q:"Which escape sequence removes the previous character?",opts:["\\a","\\b","\\n","\\t"],ans:"b"},
+  {id:70,ch:2,q:"What is the precedence of the ( ) operator?",opts:["1","2","3","4"],ans:"a"},
+  {id:71,ch:2,q:"Which function is used to take input from the user into variables?",opts:["printf","getch","scanf","scand"],ans:"c"},
+  {id:72,ch:2,q:"The name 'computer' suggests its most important aspect is:",opts:["Computation","Programming","Execution","All of these"],ans:"a"},
+  {id:73,ch:2,q:"Which operator is used to calculate the product of two numbers?",opts:["*","%","&","="],ans:"a"},
+  {id:74,ch:2,q:"The escape sequence \\t moves the cursor to the next:",opts:["Line","Tab stop","Character","Page"],ans:"b"},
+  {id:75,ch:2,q:"A false value in a Boolean expression is represented by:",opts:["%f","0","1","&"],ans:"b"},
+  {id:76,ch:2,q:"Which of the following is a valid line of code?",opts:["int = 20;","grade = 'A';","line this is a line","None of these"],ans:"b"},
+  {id:77,ch:2,q:"The logical operator that reverses a Boolean value is:",opts:["NOT operator","AND operator","OR operator","Equal to operator"],ans:"a"},
+  {id:78,ch:2,q:"What is the output of printf(\"%d\", 5 > 7);?",opts:["1","5","0","7"],ans:"c"},
+  {id:79,ch:2,q:"In C, a tab stop is a collection of how many spaces?",opts:["4 spaces","12 spaces","16 spaces","20 spaces"],ans:"a"},
+  {id:80,ch:2,q:"Which of the following is a built-in function to show information on the screen?",opts:["Information","Data","printf","scanf"],ans:"c"},
+  {id:81,ch:3,q:"Conditional logic helps in making:",opts:["Decisions","Iterations","Traversing","All of these"],ans:"a"},
+  {id:82,ch:3,q:"______ statements describe the sequence in which statements should be executed:",opts:["Loop","Condition","Control","All of these"],ans:"c"},
+  {id:83,ch:3,q:"In an if statement, what happens if the condition is false?",opts:["Program crashes","Index out of bound error","Further code executes","Compiler asks to change condition"],ans:"c"},
+  {id:84,ch:3,q:"Which of the following is the condition to check if a is a factor of c?",opts:["a+c=0","a*c=0","c%a==0","a%c==0"],ans:"c"},
+  {id:85,ch:3,q:"A condition can be any ______ expression:",opts:["Arithmetic","Relational","Logical","All of these"],ans:"d"},
+  {id:86,ch:3,q:"An if statement inside another if statement is called a ______ structure:",opts:["Nested","Boxed","Repeated","Decomposed"],ans:"a"},
+  {id:87,ch:3,q:"A set of multiple instructions enclosed in braces {} is called a:",opts:["Box","Block","Job","Decomposed"],ans:"b"},
+  {id:88,ch:3,q:"If the condition is not true and we perform some other task, this is called:",opts:["Sequential logic","Conditional logic","Control statement","None of these"],ans:"b"},
+  {id:89,ch:3,q:"In order to solve a problem, there is a need to control the flow of program ______:",opts:["Execution","Condition","Analysis","All of these"],ans:"a"},
+  {id:90,ch:3,q:"We can control the flow of program execution through:",opts:["Control statements","Flowchart","Programming","All of these"],ans:"a"},
+  {id:91,ch:3,q:"There are ______ types of control statements in C language:",opts:["Two","Three","Four","Five"],ans:"b"},
+  {id:92,ch:3,q:"Which of the following is NOT a type of control statement in C?",opts:["Sequential Control","Selection Control","Repetition Control","Check Statements"],ans:"d"},
+  {id:93,ch:3,q:"______ is the default control structure in C language:",opts:["Sequential control","Random control","Conditional control","All of these"],ans:"a"},
+  {id:94,ch:3,q:"In which structure are all statements executed in the given sequence?",opts:["Conditional Statements","Loop Statements","Selection Statements","Sequential Control"],ans:"d"},
+  {id:95,ch:3,q:"Statements that help decide which path to take based on conditions are called:",opts:["Random Statements","Reputation Statements","Conditional Statements","Selection Statements"],ans:"d"},
+  {id:96,ch:3,q:"Types of selection statements include:",opts:["if statement","if-else statement","Both A & B","loop statement"],ans:"c"},
+  {id:97,ch:3,q:"In an if statement, the code executes only if the condition is:",opts:["True","False","Both A & B","None of these"],ans:"a"},
+  {id:98,ch:3,q:"In the structure of an if statement, 'if' is a:",opts:["Keyword","Condition","Control","Structure"],ans:"a"},
+  {id:99,ch:3,q:"Any expression that has a ______ value calculates to true:",opts:["Non-zero","Zero","Arithmetic","Logical"],ans:"a"},
+  {id:100,ch:3,q:"To properly indent instructions under an if statement, we use the ______ key:",opts:["Tab","Control","Shift","Caps"],ans:"a"},
+  {id:101,ch:3,q:"When we need to execute one set of instructions if true and another if false, we use:",opts:["else statement","if-else statement","if-else-if statement","else if statement"],ans:"b"},
+  {id:102,ch:3,q:"The if-else statement executes the else block if the condition is:",opts:["True","False","Non-zero","All of these"],ans:"b"},
+  {id:103,ch:3,q:"An if statement may not necessarily have an associated ______ statement:",opts:["else","if","control","None of these"],ans:"a"},
+  {id:104,ch:3,q:"Which statement allows you to check multiple conditions in a row?",opts:["if","if-else","if-else-if ladder","while"],ans:"c"},
+  {id:105,ch:3,q:"The switch statement evaluates a ______ expression:",opts:["float","string","integer/char","Boolean"],ans:"c"},
+  {id:106,ch:3,q:"Which keyword terminates a case in a switch statement?",opts:["end","stop","break","exit"],ans:"c"},
+  {id:107,ch:3,q:"The default case in a switch statement executes when:",opts:["All cases match","No case matches","First case matches","Last case matches"],ans:"b"},
+  {id:108,ch:3,q:"Nested if statements are used for:",opts:["Simple decisions","Multiple conditions","Loops","Functions"],ans:"b"},
+  {id:109,ch:3,q:"Which of the following represents a relational expression?",opts:["a+b","a=b","a>b","a&&b"],ans:"c"},
+  {id:110,ch:3,q:"An else statement must always be paired with:",opts:["switch","while","if","for"],ans:"c"},
+  {id:111,ch:3,q:"In a switch-case, if break is not written:",opts:["Only that case executes","Program stops","Next cases also execute","Error occurs"],ans:"c"},
+  {id:112,ch:3,q:"A condition in an if statement is enclosed in:",opts:["{}","[]","()","<>"],ans:"c"},
+  {id:113,ch:3,q:"Which value represents FALSE in C?",opts:["1","-1","0","2"],ans:"c"},
+  {id:114,ch:3,q:"The if-else-if structure checks conditions:",opts:["All at once","One by one top to bottom","Bottom to top","Randomly"],ans:"b"},
+  {id:115,ch:3,q:"Which keyword is used to skip remaining cases in switch?",opts:["continue","skip","break","exit"],ans:"c"},
+  {id:116,ch:3,q:"Which operator is used for logical AND in conditions?",opts:["&","||","&&","!"],ans:"c"},
+  {id:117,ch:3,q:"The ternary operator ?: is a shorthand for:",opts:["for loop","switch","if-else","while"],ans:"c"},
+  {id:118,ch:3,q:"C language is a type of ______ where control statements are vital:",opts:["Manual","Flowchart","Programming language","All of these"],ans:"c"},
+  {id:119,ch:3,q:"Selection statements are also referred to as:",opts:["Sequential","Conditional statements","Random statements","None of these"],ans:"b"},
+  {id:120,ch:3,q:"Proper indentation is done using the ______ key to make the program easier to understand:",opts:["Tab","Control","Escape","Shift"],ans:"a"},
+  {id:121,ch:4,q:"An array is a ______ structure:",opts:["Data","Loop","Control","Conditional"],ans:"a"},
+  {id:122,ch:4,q:"Array elements are stored at ______ memory locations:",opts:["Contiguous","Scattered","Divided","None of these"],ans:"a"},
+  {id:123,ch:4,q:"If the size of an array is 100, the range of indexes will be:",opts:["0-99","0-100","1-100","2-2012"],ans:"a"},
+  {id:124,ch:4,q:"The ______ structure allows repetition of a set of instructions:",opts:["Loop","Control","Data","Conditional"],ans:"a"},
+  {id:125,ch:4,q:"______ is the unique identifier used to refer to the array:",opts:["Array name","Data type","Array size","None of these"],ans:"a"},
+  {id:126,ch:4,q:"An array can be initialized ______ declaration:",opts:["At the time of","Before","After","Both a & b"],ans:"a"},
+  {id:127,ch:4,q:"Using loops inside loops is called ______ loops:",opts:["Nested","While","Do while","For"],ans:"a"},
+  {id:128,ch:4,q:"The ______ part of a for loop is executed first:",opts:["Initialization","Condition","Body","Increment/Decrement"],ans:"a"},
+  {id:129,ch:4,q:"______ make it easier to read and write values in an array:",opts:["Loops","Conditions","Expressions","Functions"],ans:"a"},
+  {id:130,ch:4,q:"To initialize the array in a single statement, initialize it ______ declaration:",opts:["At the time of","Before","After","Both a & b"],ans:"a"},
+  {id:131,ch:4,q:"A common problem: how to ______ a set of instructions multiple times without rewriting:",opts:["Execute","Repeat","Write","Read"],ans:"a"},
+  {id:132,ch:4,q:"To store and process marks of 100 students, we need to declare:",opts:["100 variables","100 constants","Both A & B","None of these"],ans:"a"},
+  {id:133,ch:4,q:"______ programming languages provide data structures to store and organize data:",opts:["High level","Middle level","Low level","None of these"],ans:"a"},
+  {id:134,ch:4,q:"A ______ is a container to store a collection of data items in a specific layout:",opts:["Data structure","Index","Control structure","None of these"],ans:"a"},
+  {id:135,ch:4,q:"______ is one of the most commonly used data structures:",opts:["Array","Index","Control structure","None of these"],ans:"a"},
+  {id:136,ch:4,q:"An ______ is a data structure that can hold multiple values of the same data type:",opts:["Array","Loop","Control","Data"],ans:"a"},
+  {id:137,ch:4,q:"An ______ array can hold multiple integer values:",opts:["Int","Float","Char","Decimal"],ans:"a"},
+  {id:138,ch:4,q:"A ______ array can hold multiple real values:",opts:["Float","Int","Char","Decimal"],ans:"a"},
+  {id:139,ch:4,q:"An important property of an array is that it ______ all values at consecutive memory locations:",opts:["Stores","Execute","Fetch","None of these"],ans:"a"},
+  {id:140,ch:4,q:"______ is the type of data that we want to store in the array:",opts:["Data Type","Data name","Data size","None of these"],ans:"a"},
+  {id:141,ch:4,q:"______ is the unique identifier that we use to refer to the array:",opts:["Array Name","Data type","Data size","Data distance"],ans:"a"},
+  {id:142,ch:4,q:"______ is the maximum number of elements that the array can hold:",opts:["Data size","Data type","Data distance","Array Name"],ans:"a"},
+  {id:143,ch:4,q:"To declare an int array for daily wages for seven days:",opts:["int daily_wage[7];","int daily_wage(7);","int daily_wage[7]","int daily_wage[7];;"],ans:"a"},
+  {id:144,ch:4,q:"Parts of an array declaration are:",opts:["Three","Four","Five","Six"],ans:"a"},
+  {id:145,ch:4,q:"Assigning values to an array for the first time is called array ______:",opts:["Initialization","Ending","Declaration","None of these"],ans:"a"},
+  {id:146,ch:4,q:"An array can be initialized at the time of its ______:",opts:["Declaration","Initialization","Ending","None of these"],ans:"a"},
+  {id:147,ch:4,q:"Correct syntax to initialize an array at declaration:",opts:["data_type name[N]={v1,v2,...};","data_type name[N]={{v1}}","data_type name<N>={v1}","data_type name[N]=vN"],ans:"a"},
+  {id:148,ch:4,q:"The first index in an array is:",opts:["0","1","-1","Depends on size"],ans:"a"},
+  {id:149,ch:4,q:"Which loop is guaranteed to execute at least once?",opts:["for","while","do-while","nested"],ans:"c"},
+  {id:150,ch:4,q:"The ______ loop first checks the condition then executes the body:",opts:["do-while","while","for","Both a and b"],ans:"b"},
+  {id:151,ch:4,q:"What is the correct syntax of a for loop in C?",opts:["for(init;cond;update)","for(cond;init;update)","for(update;cond;init)","for(init,cond,update)"],ans:"a"},
+  {id:152,ch:4,q:"Which keyword is used to exit from a loop prematurely?",opts:["exit","stop","break","end"],ans:"c"},
+  {id:153,ch:4,q:"Which keyword skips the rest of the loop body and goes to next iteration?",opts:["break","skip","next","continue"],ans:"d"},
+  {id:154,ch:4,q:"In a while loop, if the condition is never false:",opts:["Loop executes once","Program crashes","Infinite loop occurs","Compiler error"],ans:"c"},
+  {id:155,ch:4,q:"The update part of a for loop is executed:",opts:["Before condition check","After each iteration","Before body executes","Only once"],ans:"b"},
+  {id:156,ch:4,q:"An array with 5 elements has the last valid index as:",opts:["5","6","4","3"],ans:"c"},
+  {id:157,ch:4,q:"Which correctly accesses the third element of array arr?",opts:["arr[3]","arr[2]","arr(3)","arr{3}"],ans:"b"},
+  {id:158,ch:4,q:"A ______ loop is most suitable when the number of iterations is known:",opts:["while","do-while","for","if"],ans:"c"},
+  {id:159,ch:4,q:"How many times does a while loop execute if condition is false from start?",opts:["0","1","Infinite","Depends"],ans:"a"},
+  {id:160,ch:4,q:"Nested loops mean:",opts:["One loop inside another","Two loops side by side","A loop with conditions","A loop without body"],ans:"a"},
+  {id:161,ch:4,q:"The increment operator in C is:",opts:["+=","--","++","=>"],ans:"c"},
+  {id:162,ch:4,q:"The decrement operator in C is:",opts:["+=","--","++","=>"],ans:"b"},
+  {id:163,ch:4,q:"How do you declare an integer array 'scores' of size 10?",opts:["int scores(10);","int scores[10];","int scores{10};","array int scores[10];"],ans:"b"},
+  {id:164,ch:4,q:"Accessing array beyond its bounds causes:",opts:["Compile error","Syntax error","Undefined behavior","Nothing"],ans:"c"},
+  {id:165,ch:4,q:"A char array is also known as a:",opts:["Integer array","String","Float array","None of these"],ans:"b"},
+  {id:166,ch:4,q:"For int arr[5]={1,2,3,4,5}, arr[0] is:",opts:["5","1","0","2"],ans:"b"},
+  {id:167,ch:4,q:"In C, arrays are ______ indexed:",opts:["1","0","-1","2"],ans:"b"},
+  {id:168,ch:4,q:"Which type of loop does NOT have a condition at the beginning?",opts:["for","while","do-while","All of these"],ans:"c"},
+  {id:169,ch:4,q:"In a for loop, which part is optional?",opts:["Initialization","Condition","Update","All three are optional"],ans:"d"},
+  {id:170,ch:4,q:"The position of an element in an array is called its:",opts:["Location","Address","Index","Subscript"],ans:"c"},
+  {id:171,ch:4,q:"Another name for the position of elements in an array is ______:",opts:["Index","Subscript","Superscript","None of these"],ans:"a"},
+  {id:172,ch:4,q:"Using loops, we can easily take ______ in arrays:",opts:["Input","Output","Variable","Constant"],ans:"a"},
+  {id:173,ch:4,q:"The second element of an array has the index:",opts:["1","0","2","3"],ans:"a"},
+  {id:174,ch:5,q:"Functions could be built-in or:",opts:["Admin defined","Server defined","User defined","Both a & c"],ans:"c"},
+  {id:175,ch:5,q:"The functions available in C Standard Library are called:",opts:["User defined","Built-in","Recursive","None of these"],ans:"b"},
+  {id:176,ch:5,q:"The values passed to a function are called:",opts:["Bodies","Function value","Arguments","None of these"],ans:"c"},
+  {id:177,ch:5,q:"In 'char cd(){return=\"a\";}', \"char\" is the:",opts:["Body","Return type","Array","Arguments"],ans:"b"},
+  {id:178,ch:5,q:"The advantages of using functions are:",opts:["Readability","Reusability","Easy debugging","All of these"],ans:"d"},
+  {id:179,ch:5,q:"If there are three return statements in the function body, how many will be executed?",opts:["One","Two","Three","First and Last"],ans:"a"},
+  {id:180,ch:5,q:"Readability helps to ______ the code:",opts:["Understand","Modify","Debug","All of these"],ans:"d"},
+  {id:181,ch:5,q:"______ means to transfer the control to another function:",opts:["Calling","Defining","Re-writing","Including"],ans:"a"},
+  {id:182,ch:5,q:"A good problem solving approach is to divide the problem into ______ parts:",opts:["Two smaller","Three smaller","Four smaller","Multiple smaller"],ans:"d"},
+  {id:183,ch:5,q:"The problem solving approach which divides problem into smaller parts is called:",opts:["Divide and conquer","Act it out","Defines a solution","None of these"],ans:"a"},
+  {id:184,ch:5,q:"The 'divide and conquer' approach is also known as:",opts:["Divide approach","Subpart approach","Divide and conquer","None of these"],ans:"c"},
+  {id:185,ch:5,q:"______ provides functions that allow solving programming problems using divide and conquer:",opts:["C programming language","High level language","Assembly language","All of these"],ans:"a"},
+  {id:186,ch:5,q:"A function is a ______ of statements:",opts:["Block","Segment","Function","Attribute"],ans:"a"},
+  {id:187,ch:5,q:"______ is a function that is used to display anything on computer screen:",opts:["senaf","printf","getch","getche"],ans:"b"},
+  {id:188,ch:5,q:"The ______ function is used to take input from the user:",opts:["printf","getch","getche","scanf"],ans:"d"},
+  {id:189,ch:5,q:"Each program has a ______ function which performs tasks programmed by the user:",opts:["printf","getch","getche","main()"],ans:"d"},
+  {id:190,ch:5,q:"There are ______ types of functions (basically):",opts:["Five","Four","Two","One"],ans:"c"},
+  {id:191,ch:5,q:"The functions available in C Standard Library are called:",opts:["Built-in functions","Custom built function","Common function","None of these"],ans:"a"},
+  {id:192,ch:5,q:"______ functions perform mathematical calculations, string operations, I/O operations etc:",opts:["Standard function","Library function","Integer function","Built-in functions"],ans:"d"},
+  {id:193,ch:5,q:"The functions which are defined by a programmer are called:",opts:["User-defined functions","Built-in function","Common function","None of these"],ans:"a"},
+  {id:194,ch:5,q:"Which advantages do functions provide?",opts:["Reusability","Separation of task","Handling complexity","All of these"],ans:"d"},
+  {id:195,ch:5,q:"Whenever we need to use the functionality of a function, it is called:",opts:["Readability","Separation","Reusability","None of these"],ans:"c"},
+  {id:196,ch:5,q:"Which functions provide reusability of code?",opts:["Output function","Handling the complexity","Reusability","Built in function"],ans:"d"},
+  {id:197,ch:5,q:"Which functions allow us to separate the code of one task from the code of other tasks?",opts:["Reusability","Separation of task","Handling complexity","Function signature"],ans:"b"},
+  {id:198,ch:5,q:"Which functions divide the program into smaller units and reduce complexity?",opts:["Reusability","Separation of task","Handling the complexity of the problem","Function signature"],ans:"c"},
+  {id:199,ch:5,q:"Dividing the program into multiple functions is known as:",opts:["Readability","Separation","Reusability","None of these"],ans:"b"},
+  {id:200,ch:5,q:"Dividing the program into multiple functions improves the ______ of the program:",opts:["User defined function","Built in function","Library function","Readability"],ans:"d"},
+  {id:201,ch:5,q:"A ______ is a block of statements that gets some inputs:",opts:["Function","Block statement","Function signature","None of these"],ans:"a"},
+  {id:202,ch:5,q:"Inputs of a function are called ______ of the function:",opts:["Arguments / Parameters","Block","Sense","Variable"],ans:"a"},
+  {id:203,ch:5,q:"Output of the function is called its ______ value:",opts:["Input","Max","Min","Return"],ans:"d"},
+  {id:204,ch:5,q:"A function can have multiple:",opts:["Tasks","Main","Parameters","Variables"],ans:"c"},
+  {id:205,ch:5,q:"______ is used to define the inputs and output of a function:",opts:["Function signature","Main()","Printf()","Scan()"],ans:"a"},
+  {id:206,ch:5,q:"A function that takes an integer as input and returns its square:",opts:["int square(int);","float perimeter(float,float);","int larger(int,int,int);","float area(float);"],ans:"a"},
+  {id:207,ch:5,q:"Function that takes length and width of a rectangle and returns the perimeter:",opts:["int square(int);","float perimeter(float,float);","int larger(int,int,int);","float area(float);"],ans:"b"},
+  {id:208,ch:5,q:"A function that takes three integers and returns the largest value among them:",opts:["int square(int);","float perimeter(float,float);","int larger(int,int,int);","float area(float);"],ans:"c"},
+  {id:209,ch:5,q:"A function that takes radius of a circle as input and returns the area:",opts:["float area(float);","int isVowel(char);","int square(int);","int larger(int,int,int);"],ans:"a"},
+  {id:210,ch:5,q:"A function that takes a character as input and returns 1 if vowel, otherwise 0:",opts:["float area(float);","int isVowel(char);","int square(int);","int larger(int,int,int);"],ans:"b"},
+  {id:211,ch:5,q:"The function signature does not describe how the function performs the task; the ______ does that:",opts:["Function definition","Function statement","Function value","All of these"],ans:"a"},
+  {id:212,ch:5,q:"Inside the function, ______ is a keyword used to return a value:",opts:["Calling","Return","Int","Float"],ans:"b"},
+  {id:213,ch:5,q:"There may be multiple ______ statements in a function:",opts:["Return","Calling","Function","None of these"],ans:"a"},
+  {id:214,ch:5,q:"The general structure to make a function call is:",opts:["Function_name(v1,v2,...,vN);","Function name(...)","Fn name(...)","fn name(...)"],ans:"a"},
+  {id:215,ch:5,q:"The values passed to the function are called:",opts:["Pass value","Function value","Arguments","Return value"],ans:"c"},
+  {id:216,ch:5,q:"The variables passed as arguments are not ______ by the function:",opts:["Altered","Passed","Failed","All of these"],ans:"a"},
+  {id:217,ch:5,q:"The function makes a ______ of the variables:",opts:["File","Image","Copy","All of these"],ans:"c"},
+  {id:218,ch:5,q:"Variables in the function definition that receive values are called:",opts:["Parameters","Index","Subscript","Superscript"],ans:"a"},
+  {id:219,ch:5,q:"It is not necessary to pass variables with same ______ as parameters:",opts:["Size","Type","Index","Names"],ans:"d"},
+  {id:220,ch:5,q:"If the function definition appears after the calling function, then ______ must be written before:",opts:["Function","Function statement","Function signature","All of these"],ans:"c"},
+];
+
+/* ═══════════════════════════════════════════════════════
+   STATE + STORAGE
+═══════════════════════════════════════════════════════ */
+const S={user:null,name:'',mode:null,qs:[],idx:0,answers:[],timer:null,t:60,nid:221};
+
+/* ── HARDCODED USERS — defined in code, always available ── */
+const HARDCODED_USERS=[
+  {u:'shahzaib',              p:'Shahzaib@1', role:'admin',   name:'Shahzaib Malik'},
+  {u:'meadows@testifyx.com',  p:'meadows123', role:'student', name:'Meadows'},
+  {u:'student@testifyx.com',  p:'student123', role:'student', name:'Student'},
+];
+
+function load(){
+  try{
+    const d=JSON.parse(localStorage.getItem('txv3')||'{}');
+    window.mcqs   = d.mcqs    || JSON.parse(JSON.stringify(DMCQ));
+    window.results= d.results || [];
+    S.nid         = d.nid     || 221;
+    /* Admin-added accounts from localStorage, merged with hardcoded */
+    const extra=(d.users||[]).filter(x=>!HARDCODED_USERS.find(h=>h.u===x.u));
+    window.users  = [...HARDCODED_USERS, ...extra];
+  }catch{
+    window.mcqs   = JSON.parse(JSON.stringify(DMCQ));
+    window.users  = [...HARDCODED_USERS];
+    window.results= [];
+  }
+}
+function save(){
+  try{
+    /* Only save admin-added users — hardcoded ones live in code */
+    const extraUsers=window.users.filter(x=>!HARDCODED_USERS.find(h=>h.u===x.u));
+    localStorage.setItem('txv3',JSON.stringify({mcqs:window.mcqs,users:extraUsers,results:window.results,nid:S.nid}));
+  }catch{}
+}
+
+/* ═══════════════════════════════════════════════════════
+   PARTICLES
+═══════════════════════════════════════════════════════ */
+function initParticles(){
+  const c=document.getElementById('cvs'),ctx=c.getContext('2d');
+  let W,H,pts=[];
+  class P{reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*1.4+.4;this.vx=(Math.random()-.5)*.25;this.vy=(Math.random()-.5)*.25;this.a=Math.random()*.3+.06;this.h=Math.random()*60+240;}}
+  const rs=()=>{W=c.width=innerWidth;H=c.height=innerHeight;};
+  rs();pts=Array.from({length:60},()=>{const p=new P;p.reset();return p;});
+  addEventListener('resize',()=>{rs();pts.forEach(p=>p.reset());});
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>W||p.y<0||p.y>H)p.reset();
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`hsla(${p.h},80%,70%,${p.a})`;ctx.fill();
+    });
+    for(let i=0;i<pts.length-1;i++){
+      for(let j=i+1;j<pts.length;j++){
+        const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<90){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`hsla(260,80%,70%,${.1*(1-d/90)})`;ctx.lineWidth=.5;ctx.stroke();}
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+/* ═══════════════════════════════════════════════════════
+   RIPPLE
+═══════════════════════════════════════════════════════ */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.btn');if(!b)return;
+  SND.init();SND.resume();
+  // Don't double-play click for option buttons (pick() handles those)
+  if(!b.closest('#q-opts'))SND.click();
+  const r=b.getBoundingClientRect(),s=Math.max(r.width,r.height)*2;
+  const el=document.createElement('span');
+  el.className='ripple';
+  el.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-r.left-s/2}px;top:${e.clientY-r.top-s/2}px`;
+  b.appendChild(el);setTimeout(()=>el.remove(),600);
+});
+
+/* ═══════════════════════════════════════════════════════
+   PAGE NAV
+═══════════════════════════════════════════════════════ */
+function showPg(id){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo(0,0);
+}
+function showLoader(ms=500,txt=''){
+  const el=document.getElementById('loader');
+  if(txt)document.getElementById('ld-txt').textContent=txt;
+  el.classList.add('on');
+  return new Promise(r=>setTimeout(()=>{el.classList.remove('on');r();},ms));
+}
+
+/* ═══════════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════════ */
+function toast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='on t-'+type;
+  clearTimeout(t._t);t._t=setTimeout(()=>t.className='',3200);
+}
+
+/* ═══════════════════════════════════════════════════════
+   LOGIN
+═══════════════════════════════════════════════════════ */
+function doLogin(){
+  const u=document.getElementById('li-user').value.trim();
+  const p=document.getElementById('li-pass').value;
+  const err=document.getElementById('li-err');err.style.display='none';
+  const user=window.users.find(x=>x.u===u&&x.p===p);
+  if(!user){err.style.display='block';return;}
+  S.user=user;
+  SND.init();SND.resume();
+  setTimeout(()=>SND.welcome(),180);
+  showLoader(500,'Signing in...').then(()=>{
+    if(user.role==='admin'){showPg('pg-admin');refreshAdmin();}
+    else showPg('pg-name');
+  });
+}
+document.getElementById('li-btn').onclick=doLogin;
+document.getElementById('li-pass').onkeydown=e=>{if(e.key==='Enter')doLogin();};
+document.getElementById('li-user').onkeydown=e=>{if(e.key==='Enter')document.getElementById('li-pass').focus();};
+
+/* ═══════════════════════════════════════════════════════
+   LOGOUT
+═══════════════════════════════════════════════════════ */
+function logout(){
+  SND.logout();
+  setTimeout(()=>{
+    S.user=null;S.name='';stopTimer();
+    document.getElementById('li-user').value='';
+    document.getElementById('li-pass').value='';
+    showPg('pg-login');
+  },320);
+}
+
+/* ═══════════════════════════════════════════════════════
+   STUDENT NAME
+═══════════════════════════════════════════════════════ */
+document.getElementById('sn-btn').onclick=function(){
+  const n=document.getElementById('sn-input').value.trim();
+  const err=document.getElementById('sn-err');
+  if(!n){err.style.display='block';return;}
+  err.style.display='none';S.name=n;
+  document.getElementById('ch-name').textContent=n;
+  document.getElementById('ch-ava').textContent=n[0].toUpperCase();
+  document.getElementById('q-sname').textContent=n;
+  showLoader(400,'Loading...').then(()=>showPg('pg-chapter'));
+};
+document.getElementById('sn-input').onkeydown=e=>{if(e.key==='Enter')document.getElementById('sn-btn').click();};
+
+/* ═══════════════════════════════════════════════════════
+   QUIZ
+═══════════════════════════════════════════════════════ */
+function sfl(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+
+function startQuiz(mode){
+  S.mode=mode;
+  const pool=mode==='full'?sfl(window.mcqs):sfl(window.mcqs.filter(q=>q.ch===mode));
+  const lim=mode==='full'?Math.min(60,pool.length):Math.min(30,pool.length);
+  S.qs=pool.slice(0,lim).map(q=>{
+    const L=['a','b','c','d'];
+    const sh=sfl(q.opts.map((o,i)=>({o,l:L[i]})));
+    return{...q,dOpts:sh.map(x=>x.o),cidx:sh.findIndex(x=>x.l===q.ans)};
+  });
+  S.idx=0;S.answers=[];
+  document.getElementById('q-total').textContent=S.qs.length;
+  document.getElementById('q-corr').textContent='0';
+  document.getElementById('q-wrong').textContent='0';
+  document.getElementById('q-chlabel').textContent=mode==='full'?'Full Book Test':'Chapter '+mode+' – '+CHN[mode];
+  document.getElementById('q-sname').textContent=S.name;
+  showLoader(450,'Preparing quiz...').then(()=>{showPg('pg-quiz');renderQ();});
+}
+
+function renderQ(){
+  const q=S.qs[S.idx];
+  const i=S.idx,tot=S.qs.length;
+  document.getElementById('q-num').textContent=i+1;
+  document.getElementById('q-prog').style.width=((i/tot)*100)+'%';
+  document.getElementById('q-badge').textContent=CHI[q.ch]+' Chapter '+q.ch+' – '+CHN[q.ch];
+  document.getElementById('q-text').textContent=q.q;
+  const L=['A','B','C','D'];
+  const container=document.getElementById('q-opts');
+  container.innerHTML='';
+  q.dOpts.forEach((opt,j)=>{
+    const btn=document.createElement('button');
+    btn.className='opt';
+    btn.innerHTML=`<span class="opt-l">${L[j]}</span><span>${opt}</span>`;
+    btn.onclick=()=>{SND.init();SND.resume();pick(j);};
+    container.appendChild(btn);
+  });
+  const fb=document.getElementById('ans-fb');fb.className='ans-fb';
+  startTimer();
+}
+
+function pick(chosen){
+  SND.click();
+  stopTimer();
+  const q=S.qs[S.idx];
+  const ok=chosen===q.cidx;
+  S.answers.push({qId:q.id,ch:q.ch,question:q.q,opts:q.dOpts,chosen,correct:q.cidx,ok});
+  const btns=document.querySelectorAll('#q-opts .opt');
+  btns.forEach((b,j)=>{
+    b.disabled=true;
+    if(j===q.cidx)b.classList.add('correct');
+    if(j===chosen&&!ok)b.classList.add('wrong');
+  });
+  const corr=S.answers.filter(a=>a.ok).length;
+  document.getElementById('q-corr').textContent=corr;
+  document.getElementById('q-wrong').textContent=S.answers.length-corr;
+  const fb=document.getElementById('ans-fb');
+  if(ok){
+    setTimeout(()=>SND.correct(),30);
+    document.getElementById('ans-emoji').textContent=rnd(CE);
+    document.getElementById('ans-txt').textContent='Correct! Great job, '+S.name+'!';
+    fb.className='ans-fb on fb-ok';
+  } else {
+    setTimeout(()=>SND.wrong(),30);
+    document.getElementById('ans-emoji').textContent=rnd(WE);
+    document.getElementById('ans-txt').textContent='Wrong! Correct: '+q.dOpts[q.cidx];
+    fb.className='ans-fb on fb-err';
+  }
+  setTimeout(nextQ,1400);
+}
+
+function nextQ(){S.idx++;S.idx>=S.qs.length?finishQuiz():renderQ();}
+
+/* ═══════════════════════════════════════════════════════
+   CANCEL QUIZ
+═══════════════════════════════════════════════════════ */
+function cancelQuiz(){document.getElementById('cancel-modal').classList.add('on');}
+function confirmCancel(){
+  stopTimer();
+  document.getElementById('cancel-modal').classList.remove('on');
+  showPg('pg-chapter');
+}
+document.getElementById('cancel-modal').onclick=function(e){if(e.target===this)this.classList.remove('on');};
+
+/* ═══════════════════════════════════════════════════════
+   TIMER
+═══════════════════════════════════════════════════════ */
+function startTimer(){
+  S.t=60;updTimer(60);clearInterval(S.timer);
+  S.timer=setInterval(()=>{
+    S.t--;updTimer(S.t);
+    if(S.t<=0){
+      stopTimer();
+      const q=S.qs[S.idx];
+      S.answers.push({qId:q.id,ch:q.ch,question:q.q,opts:q.dOpts,chosen:-1,correct:q.cidx,ok:false});
+      document.getElementById('q-wrong').textContent=S.answers.filter(a=>!a.ok).length;
+      document.querySelectorAll('#q-opts .opt').forEach((b,j)=>{b.disabled=true;if(j===q.cidx)b.classList.add('correct');});
+      const fb=document.getElementById('ans-fb');
+      document.getElementById('ans-emoji').textContent='⏰';
+      document.getElementById('ans-txt').textContent="Time's up! Moving on...";
+      fb.className='ans-fb on fb-err';
+      setTimeout(nextQ,900);
+    }
+  },1000);
+}
+function stopTimer(){clearInterval(S.timer);}
+function updTimer(t){
+  const arc=document.getElementById('t-arc'),circ=125.7;
+  arc.style.strokeDashoffset=circ*(1-t/60);
+  arc.style.stroke=t>20?'var(--p1)':t>10?'var(--gold)':'var(--red)';
+  const n=document.getElementById('t-num');n.textContent=t;
+  n.style.color=t<=10?'var(--red)':t<=20?'var(--gold)':'var(--txt)';
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESULTS
+═══════════════════════════════════════════════════════ */
+function finishQuiz(){
+  stopTimer();
+  const tot=S.answers.length,corr=S.answers.filter(a=>a.ok).length,wrong=tot-corr;
+  const pct=tot?Math.round(corr/tot*100):0,passed=pct>=50;
+  window.results.push({id:Date.now(),student:S.name,username:S.user?.u||'',chapter:S.mode,total:tot,correct:corr,wrong,pct,passed,date:new Date().toLocaleDateString('en-GB')});
+  save();
+  document.getElementById('r-emoji').textContent=passed?rnd(PE):rnd(FE);
+  // Ring animation
+  const arc=document.getElementById('ring-arc');
+  arc.style.strokeDashoffset=376;arc.style.stroke=passed?'url(#rg)':'var(--red)';
+  setTimeout(()=>{arc.style.strokeDashoffset=376*(1-pct/100);},200);
+  // Counter animation
+  const pctEl=document.getElementById('ring-pct');let cur=0;
+  const inc=setInterval(()=>{cur=Math.min(cur+Math.ceil(pct/35),pct);pctEl.textContent=cur+'%';if(cur>=pct)clearInterval(inc);},28);
+  document.getElementById('r-title').textContent=passed?'Brilliant Work! 🏆':'Keep Pushing! 💪';
+  document.getElementById('r-info').innerHTML=`<b>${S.name}</b> · ${S.mode==='full'?'Full Book':'Chapter '+S.mode}`;
+  const pill=document.getElementById('r-pill');pill.textContent=passed?'✅ PASS':'❌ FAIL';pill.className='pass-pill '+(passed?'pill-pass':'pill-fail');
+  document.getElementById('r-tot').textContent=tot;
+  document.getElementById('r-corr').textContent=corr;
+  document.getElementById('r-wrong').textContent=wrong;
+  const rl=document.getElementById('rev-list');rl.innerHTML='';
+  S.answers.forEach((a,i)=>{
+    const div=document.createElement('div');div.className='rev-item '+(a.ok?'ri-ok':'ri-err');
+    const L=['A','B','C','D'];
+    const cl=a.chosen>=0?L[a.chosen]+'. '+a.opts[a.chosen]:'⏰ Not answered';
+    const cor=L[a.correct]+'. '+a.opts[a.correct];
+    div.innerHTML=`<div class="rev-q">${i+1}. ${a.question}</div><div class="rev-ans"><span class="${a.ok?'ra-ok':'ra-err'}">${a.ok?'✅':'❌'} ${cl}</span>${!a.ok?`<span class="ra-ok">✅ ${cor}</span>`:''}</div>`;
+    rl.appendChild(div);
+  });
+  showLoader(400,'Calculating results...').then(()=>showPg('pg-result'));
+}
+function toggleRev(){const l=document.getElementById('rev-list'),a=document.getElementById('rev-arr');l.classList.toggle('on');a.textContent=l.classList.contains('on')?'▲':'▼';}
+function goChapter(){showPg('pg-chapter');}
+function retake(){startQuiz(S.mode);}
+
+/* ═══════════════════════════════════════════════════════
+   ADMIN
+═══════════════════════════════════════════════════════ */
+function aTab(t){
+  document.querySelectorAll('.a-tab').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.sb-item').forEach(x=>x.classList.remove('on'));
+  document.getElementById('at-'+t).classList.add('on');
+  document.querySelectorAll('.sb-item').forEach(x=>{if(x.getAttribute('onclick')?.includes("'"+t+"'"))x.classList.add('on');});
+  if(t==='dashboard')refreshDash();if(t==='mcqs')renderMCQs();if(t==='students')renderStudents();if(t==='results')renderResults();
+}
+function refreshAdmin(){refreshDash();renderMCQs();renderStudents();renderResults();}
+function refreshDash(){
+  document.getElementById('a-nmcqs').textContent=window.mcqs.length;
+  document.getElementById('a-nstu').textContent=window.users.filter(x=>x.role!=='admin').length;
+  document.getElementById('a-natm').textContent=window.results.length;
+  const p=window.results.filter(r=>r.passed).length;
+  document.getElementById('a-npass').textContent=(window.results.length?Math.round(p/window.results.length*100):0)+'%';
+  const tb=document.getElementById('a-recent');
+  const rec=[...window.results].reverse().slice(0,10);
+  if(!rec.length){tb.innerHTML='<tr><td colspan="5" class="empty-td">No attempts yet</td></tr>';return;}
+  tb.innerHTML=rec.map(r=>`<tr><td><b>${r.student}</b></td><td>${r.chapter==='full'?'Full Book':'Ch.'+r.chapter}</td><td>${r.correct}/${r.total}</td><td><span class="chip ${r.passed?'chip-g':'chip-r'}">${r.passed?'PASS':'FAIL'}</span></td><td style="color:var(--muted);font-size:12px">${r.date}</td></tr>`).join('');
+}
+let pickedAns='';
+function pickAns(l){pickedAns=l;document.getElementById('m-ans').value=l;document.querySelectorAll('.ans-btn').forEach(b=>b.classList.remove('on'));document.querySelectorAll('.ans-btn').forEach(b=>{if(b.textContent.toLowerCase()===l)b.classList.add('on');});}
+function clearMcqForm(){
+  document.getElementById('mcq-form-title').textContent='➕ Add New MCQ';document.getElementById('edit-id').value='';document.getElementById('m-q').value='';
+  ['a','b','c','d'].forEach(l=>document.getElementById('m-'+l).value='');
+  pickedAns='';document.getElementById('m-ans').value='';document.querySelectorAll('.ans-btn').forEach(b=>b.classList.remove('on'));document.getElementById('m-ch').value='1';
+}
+function saveMCQ(){
+  const ch=parseInt(document.getElementById('m-ch').value);
+  const q=document.getElementById('m-q').value.trim();
+  const opts=['a','b','c','d'].map(l=>document.getElementById('m-'+l).value.trim());
+  const ans=document.getElementById('m-ans').value;
+  if(!q||opts.some(o=>!o)||!ans){toast('⚠️ Fill all fields and select correct answer.','err');return;}
+  const eid=document.getElementById('edit-id').value;
+  if(eid){const i=window.mcqs.findIndex(m=>m.id===parseInt(eid));if(i>-1)window.mcqs[i]={...window.mcqs[i],ch,q,opts,ans};toast('✅ MCQ updated!');}
+  else{window.mcqs.push({id:S.nid++,ch,q,opts,ans});toast('✅ MCQ added!');}
+  save();clearMcqForm();renderMCQs();refreshDash();
+}
+function editMCQ(id){
+  const m=window.mcqs.find(x=>x.id===id);if(!m)return;
+  document.getElementById('mcq-form-title').textContent='✏️ Edit MCQ';document.getElementById('edit-id').value=id;
+  document.getElementById('m-ch').value=m.ch;document.getElementById('m-q').value=m.q;
+  ['a','b','c','d'].forEach((l,i)=>document.getElementById('m-'+l).value=m.opts[i]);
+  pickAns(m.ans);aTab('mcqs');document.querySelector('.a-form').scrollIntoView({behavior:'smooth'});
+}
+let delT=null,delTp=null;
+function delMCQ(id){delT=id;delTp='mcq';document.getElementById('del-modal').classList.add('on');document.getElementById('del-confirm').onclick=doDel;}
+function delStu(u){delT=u;delTp='stu';document.getElementById('del-modal').classList.add('on');document.getElementById('del-confirm').onclick=doDel;}
+function doDel(){
+  if(delTp==='mcq'){window.mcqs=window.mcqs.filter(m=>m.id!==delT);toast('🗑️ Deleted.');renderMCQs();refreshDash();}
+  else{window.users=window.users.filter(x=>x.u!==delT);toast('🗑️ Removed.');renderStudents();refreshDash();}
+  save();document.getElementById('del-modal').classList.remove('on');
+}
+document.getElementById('del-modal').onclick=function(e){if(e.target===this)this.classList.remove('on');};
+function renderMCQs(){
+  const s=(document.getElementById('m-search').value||'').toLowerCase();
+  const ch=document.getElementById('m-fch').value;
+  const f=window.mcqs.filter(m=>{if(ch&&m.ch!==parseInt(ch))return false;if(s&&!m.q.toLowerCase().includes(s))return false;return true;});
+  const c=document.getElementById('mcq-list');
+  if(!f.length){c.innerHTML='<div style="text-align:center;color:var(--muted);padding:30px;font-size:14px">No MCQs found</div>';return;}
+  const L=['A','B','C','D'],ls=['a','b','c','d'];
+  c.innerHTML=f.map(m=>`<div class="mcq-item"><div class="mcq-body"><div class="mcq-q">${m.q}</div><div class="mcq-opts">${m.opts.map((o,i)=>`<span class="mc ${m.ans===ls[i]?'ans':''}">${L[i]}. ${o}</span>`).join('')}</div><div style="font-size:10px;color:var(--muted);margin-top:5px;font-weight:600">Ch.${m.ch} · #${m.id}</div></div><div class="mcq-acts"><button class="btn btn-o btn-icon" onclick="editMCQ(${m.id})">✏️</button><button class="btn btn-danger btn-icon" onclick="delMCQ(${m.id})">🗑️</button></div></div>`).join('');
+}
+function addStudent(){
+  const u=document.getElementById('s-usr').value.trim(),p=document.getElementById('s-pwd').value,n=document.getElementById('s-nm').value.trim();
+  if(!u||!p||!n){toast('⚠️ Fill all fields.','err');return;}
+  if(window.users.find(x=>x.u===u)){toast('⚠️ Username exists.','err');return;}
+  window.users.push({u,p,role:'student',name:n});save();
+  document.getElementById('s-usr').value='';document.getElementById('s-pwd').value='';document.getElementById('s-nm').value='';
+  toast('✅ Student added!');renderStudents();refreshDash();
+}
+function renderStudents(){
+  const students=window.users.filter(x=>x.role!=='admin');
+  const tb=document.getElementById('a-stu');
+  if(!students.length){tb.innerHTML='<tr><td colspan="5" class="empty-td">No students yet</td></tr>';return;}
+  tb.innerHTML=students.map(s=>{
+    const sr=window.results.filter(r=>r.username===s.u);
+    const best=sr.length?Math.max(...sr.map(r=>r.pct))+'%':'-';
+    return`<tr><td><b>${s.name}</b></td><td><code style="font-size:11px;color:var(--p1);background:rgba(108,99,255,.1);padding:2px 7px;border-radius:6px">${s.u}</code></td><td>${sr.length}</td><td style="color:var(--green);font-weight:700">${best}</td><td><button class="btn btn-danger btn-xs" onclick="delStu('${s.u}')">Remove</button></td></tr>`;}).join('');
+}
+function renderResults(){
+  const s=(document.getElementById('r-s').value||'').toLowerCase();
+  const ch=document.getElementById('r-ch').value;
+  const f=[...window.results].reverse().filter(r=>{if(ch&&String(r.chapter)!==ch)return false;if(s&&!r.student.toLowerCase().includes(s))return false;return true;});
+  const tb=document.getElementById('a-res');
+  if(!f.length){tb.innerHTML='<tr><td colspan="7" class="empty-td">No results</td></tr>';return;}
+  tb.innerHTML=f.map(r=>`<tr><td><b>${r.student}</b></td><td>${r.chapter==='full'?'Full Book':'Ch.'+r.chapter}</td><td>${r.total}</td><td style="color:var(--green);font-weight:700">${r.correct}</td><td><b>${r.pct}%</b></td><td><span class="chip ${r.passed?'chip-g':'chip-r'}">${r.passed?'PASS':'FAIL'}</span></td><td style="color:var(--muted);font-size:11px">${r.date}</td></tr>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded',()=>{load();initParticles();loadSndPrefs();});
+</script>
+</body>
+</html>
